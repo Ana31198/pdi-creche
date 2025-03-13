@@ -3,7 +3,6 @@
 @section('title','Contact')
 @section('content')
 
-<p>Esta sera a pagina de contacto </p>
 
 <div class="col-md-6">
     <h3>Informações</h3>
