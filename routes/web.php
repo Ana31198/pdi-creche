@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RotinaController;
 use App\Http\Controllers\PresencaController;
 
+use App\Http\Controllers\FotosController;
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect('/dashboard'); // Redireciona usuários logados
@@ -38,6 +40,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}', [PresencaController::class, 'show'])->name('presencas.show');
     });
 
+
+    Route::get('/fotos', [FotosController::class, 'index'])->name('fotos.index');
+    Route::get('/fotos/create', [FotosController::class, 'create'])->name('fotos.create');
+    Route::post('/fotos', [FotosController::class, 'store'])->name('fotos.store');
+    Route::get('/fotos/{id}', [FotosController::class, 'show'])->name('fotos.show');
+    Route::get('/fotos/{id}/edit', [FotosController::class, 'edit'])->name('fotos.edit');
+    Route::put('/fotos/{id}', [FotosController::class, 'update'])->name('fotos.update');
+    Route::delete('/fotos/{id}', [FotosController::class, 'destroy'])->name('fotos.destroy');
+
+    
     Route::post('/presencas/{id}/registar-saida', [PresencaController::class, 'registar_saida'])->name('presencas.registar_saida');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

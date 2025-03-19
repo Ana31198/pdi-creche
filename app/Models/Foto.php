@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Fotografia extends Model
+class Foto extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['crianca_id', 'caminho'];
+    protected $fillable = ['titulo', 'descricao', 'caminho', 'crianca_id'];
 
+    // Relação: Foto pertence a uma Criança
     public function crianca()
     {
         return $this->belongsTo(Crianca::class);

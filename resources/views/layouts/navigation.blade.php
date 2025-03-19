@@ -29,7 +29,7 @@
                         <li class="nav-item"><a class="nav-link" href="/criancas">Crianças</a></li>
                         <li class="nav-item"><a class="nav-link" href="/rotinas">Rotinas</a></li>
                         <li class="nav-item"><a class="nav-link" href="/presencas">Presenças</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/fotografias">Fotografias</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/fotos">Fotografias</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">Contacto</a></li>
                         @guest
                             <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registar</a></li>

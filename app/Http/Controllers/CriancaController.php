@@ -66,6 +66,10 @@ class CriancaController extends Controller
     
         return view('criancas.show', compact('crianca'));
     }
-    
+    public function fotografia()
+{
+    return $this->hasMany(Fotografia::class);
+}
+
     
 }
