@@ -7,14 +7,26 @@
         <h1 class="criancas">Publicações de Rotinas</h1>
 
         @if(auth()->user()->isEducador())
-            <a href="{{ route('rotinas.create') }}" class="btn btn-primary mb-3">Registrar Presença</a>
-
+            <a href="{{ route('rotinas.create') }}" class="btn btn-primary">Registrar Presença</a>
         @endif
         @if(auth()->user()->isAdmin())
-        <a href="{{ route('rotinas.create') }}" class="btn btn-primary mb-3">Registrar Rotina</a>
-    @endif
-        </a>
+            <a href="{{ route('rotinas.create') }}" class="btn btn-primary">Registrar Rotina</a>
+        @endif
     </div>
+
+    <!-- Filtros de Pesquisa -->
+    <form method="GET" action="{{ route('rotinas.index') }}" class="mb-4 d-flex gap-2">
+        <select name="crianca_id" class="form-select">
+            <option value="">Todas as Crianças</option>
+            @foreach($criancas as $crianca)
+                <option value="{{ $crianca->id }}" {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
+                    {{ $crianca->nome }}
+                </option>
+            @endforeach
+        </select>
+        <input type="date" name="data" value="{{ request('data') }}" class="form-control">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
 
     <!-- Mensagem de Sucesso -->
     @if(session('success'))
@@ -23,54 +35,42 @@
         </div>
     @endif
 
-    <!-- Feed de Publicações -->
-    <div class="row">
-        @if($rotinas->isEmpty())
-            <div class="col-12 text-center">
-                <p class="text-muted">Ainda não há publicações de rotinas registadas.</p>
-            </div>
-        @else
-            @foreach($rotinas as $rotina)
-                <div class="col-md-6 mb-4">
-                    <div class="card rounded-3 shadow-lg">
-                        <div class="card-body">
-                            <!-- Cabeçalho da Publicação -->
-                            <div class="d-flex align-items-center">
-                                <img src="{{ asset($rotina->crianca->image) }}" alt="{{ $rotina->crianca->nome }}" class="rounded-circle" width="50" height="50">
-                                <div class="ms-3">
-                                    <h5 class="card-title mb-1">{{ $rotina->crianca->nome }}</h5>
-                                    <small class="text-muted">{{ date('d/m/Y', strtotime($rotina->data)) }}</small>
-                                </div>
-                            </div>
+    <!-- Resumo do Dia -->
+    @if($rotinas->isNotEmpty())
+        <div class="alert alert-info">
+            <strong>{{ $rotinas->count() }}</strong> rotinas registradas hoje para 
+            <strong>{{ $rotinas->pluck('crianca_id')->unique()->count() }}</strong> crianças.
+        </div>
+    @endif
 
-                            <!-- Corpo da Publicação (Atividade) -->
-                            <div class="mt-3">
-                                <p class="card-text">{{ $rotina->atividade }}</p>
-                            </div>
-
-                            <!-- Ações da Publicação (Curtir, Comentar, etc.) -->
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <div>
-                                    <a href="{{ route('rotinas.show', $rotina->id) }}" class="btn btn-link text-muted">
-                                        <i class="fas fa-info-circle"></i> Detalhes
-                                    </a>
-                                    <a href="" class="btn btn-link text-muted">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                </div>
-                                <form action="" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link text-danger" onclick="return confirm('Tem a certeza que deseja eliminar esta publicação?')">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </button>
-                                </form>
-                            </div>
+    <!-- Feed de Publicações Organizado por Criança -->
+    @foreach($criancas as $crianca)
+        <div class="mb-4">
+            <h3 class="border-bottom pb-2">{{ $crianca->nome }}</h3>
+            <ul class="list-group">
+                @foreach($crianca->rotinas as $rotina)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ date('d/m/Y', strtotime($rotina->data)) }} - {{ $rotina->atividade }}</span>
+                        <div>
+                            <a href="{{ route('rotinas.show', $rotina->id) }}" class="text-muted me-2">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a href="" class="text-muted me-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link text-danger p-0" 
+                                    onclick="return confirm('Tem certeza que deseja eliminar esta publicação?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </div>
-                    </div>
-                </div>
-            @endforeach
-        @endif
-    </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endforeach
 </div>
 @endsection

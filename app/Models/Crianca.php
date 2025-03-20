@@ -18,6 +18,10 @@ class Crianca extends Model
 {
     return $query->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$userName]);
 }
+public function rotinas()
+{
+    return $this->hasMany(Rotina::class, 'crianca_id');
+}
 
 
 }
