@@ -17,6 +17,12 @@ class Rotina extends Model
 
     public function scopeDoResponsavel($query, $userName)
     {
-        return $query->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$userName]);
+        return $query->whereHas('crianca', function ($q) use ($userName) {
+            $q->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$userName]);
+        });
     }
+    
+
+    
+    
 }

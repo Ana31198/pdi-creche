@@ -2,7 +2,6 @@
 
 @section('title', 'Histórico de ' . $crianca->nome)
 
-
 @section('content')
 <div class="container mt-4">
     <h1>Histórico de Atividades de {{ $crianca->nome }}</h1>
@@ -17,7 +16,7 @@
             </p>
             <h2>Atividades</h2>
             @if($rotinas->isEmpty())
-                <p class="text-muted text-center">Nenhuma atividade encontrada.</p>
+                <p class="text-muted text-center">Nenhuma atividade registrada.</p>
             @else
                 <table class="table table-hover">
                     <thead class="table-dark">

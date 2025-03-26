@@ -14,18 +14,47 @@
         @endif
     </div>
 
-    <!-- Filtros de Pesquisa -->
-    <form method="GET" action="{{ route('rotinas.index') }}" class="mb-4 d-flex gap-2">
-        <select name="crianca_id" class="form-select">
-            <option value="">Todas as Crianças</option>
-            @foreach($criancas as $crianca)
-                <option value="{{ $crianca->id }}" {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
-                    {{ $crianca->nome }}
-                </option>
-            @endforeach
-        </select>
-        <input type="date" name="data" value="{{ request('data') }}" class="form-control">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+    <!-- Filtros para Admin e Responsável -->
+    <form method="GET" action="{{ route('rotinas.index') }}" class="mb-3">
+        <div class="row">
+            @if(auth()->user()->isAdmin())
+                <!-- Filtro por Criança para Admin -->
+                <div class="col-md-4">
+                    <select name="crianca_id" class="form-select">
+                        <option value="">Todas as Crianças</option> <!-- Opção para todas as crianças -->
+                        @foreach($criancas as $crianca)
+                            <option value="{{ $crianca->id }}" 
+                                {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
+                                {{ $crianca->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @else
+                <!-- Filtro para Responsável: apenas as crianças associadas a ele -->
+                <div class="col-md-4">
+                    <select name="crianca_id" class="form-select">
+                        <option value="">Todas as Crianças</option>
+                        @foreach($criancas->where('nomeresponsavel', auth()->user()->name) as $crianca)
+                            <option value="{{ $crianca->id }}" 
+                                {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
+                                {{ $crianca->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
+
+            <!-- Filtro por Data -->
+            <div class="col-md-4">
+                <input type="date" name="data" class="form-control" value="{{ request('data') }}">
+            </div>
+
+            <!-- Botão de Filtrar -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+        </div>
     </form>
 
     <!-- Mensagem de Sucesso -->
@@ -36,41 +65,71 @@
     @endif
 
     <!-- Resumo do Dia -->
-    @if($rotinas->isNotEmpty())
-        <div class="alert alert-info">
-            <strong>{{ $rotinas->count() }}</strong> rotinas registradas hoje para 
-            <strong>{{ $rotinas->pluck('crianca_id')->unique()->count() }}</strong> crianças.
-        </div>
+    @php
+        // Filtragem para Admin: Se não há filtro de criança, mostra todas
+        if(auth()->user()->isAdmin() && request('crianca_id') == '') {
+            $criancasFiltradas = $criancas;
+        } elseif(auth()->user()->isAdmin() && request('crianca_id')) {
+            $criancasFiltradas = $criancas->where('id', request('crianca_id'));
+        } else {
+            // Se for um responsável, mostra apenas as crianças associadas ao responsável
+            $criancasFiltradas = $criancas->where('nomeresponsavel', auth()->user()->name);
+        }
+
+        // Filtrar rotinas pelas crianças selecionadas
+        $rotinasFiltradas = $rotinas->whereIn('crianca_id', $criancasFiltradas->pluck('id'));
+
+        // Filtrar por data se uma data for selecionada
+        if(request('data')) {
+            $rotinasFiltradas = $rotinasFiltradas->where('data', request('data'));
+        }
+    @endphp
+
+    @if($rotinasFiltradas->isNotEmpty())
+        <!-- Exibir resumo -->
+      
+    @else
+        <div class="alert alert-warning">Nenhuma rotina encontrada para os filtros aplicados.</div>
     @endif
 
-    <!-- Feed de Publicações Organizado por Criança -->
-    @foreach($criancas as $crianca)
-        <div class="mb-4">
-            <h3 class="border-bottom pb-2">{{ $crianca->nome }}</h3>
-            <ul class="list-group">
-                @foreach($crianca->rotinas as $rotina)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{ date('d/m/Y', strtotime($rotina->data)) }} - {{ $rotina->atividade }}</span>
-                        <div>
-                            <a href="{{ route('rotinas.show', $rotina->id) }}" class="text-muted me-2">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
-                            <a href="" class="text-muted me-2">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-link text-danger p-0" 
-                                    onclick="return confirm('Tem certeza que deseja eliminar esta publicação?')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+    <!-- Feed de Publicações -->
+    @foreach($criancasFiltradas as $crianca)
+        @php
+            $rotinasDaCrianca = $rotinasFiltradas->where('crianca_id', $crianca->id);
+        @endphp
+
+        @if($rotinasDaCrianca->isNotEmpty())
+            <div class="mb-4">
+                <h3 class="border-bottom pb-2 text-primary">{{ $crianca->nome }}</h3>
+                <div class="row">
+                    @foreach($rotinasDaCrianca as $rotina)
+                        <div class="col-md-6">
+                            <div class="card shadow-lg rounded-3 mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img src="{{ asset($crianca->image) }}" alt="{{ $crianca->nome }}" class="rounded-circle me-3" width="50" height="50">
+                                        <div>
+                                            <h5 class="mb-1">{{ $crianca->nome }}</h5>
+                                            <small class="text-muted">{{ date('d/m/Y', strtotime($rotina->data)) }}</small>
+                                        </div>
+                                    </div>
+
+                                    <p class="card-text text-muted">{{ $rotina->atividade }}</p>
+
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ route('rotinas.show', $rotina->id) }}" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-info-circle"></i> Detalhes
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
     @endforeach
+
 </div>
 @endsection

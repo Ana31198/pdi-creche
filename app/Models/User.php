@@ -17,18 +17,33 @@ class User extends Authenticatable
         'role',
     ];
 
+    // Verifica se o usuário é Admin
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
 
+    // Verifica se o usuário é Educador
     public function isEducador()
     {
         return $this->role === 'educador';
     }
 
+    // Verifica se o usuário é Pai (Responsável)
     public function isPai()
     {
         return $this->role === 'pai';
+    }
+
+    // Verifica se o usuário é Responsável (Pai/Mãe)
+    public function isResponsavel()
+    {
+        return $this->role === 'responsavel'; // Ou ajusta a lógica conforme necessário
+    }
+
+    // Relação com Crianças (caso um responsável tenha várias crianças)
+    public function criancas()
+    {
+        return $this->hasMany(Crianca::class);
     }
 }

@@ -10,35 +10,37 @@ class RotinaController extends Controller
 {
     public function index(Request $request)
     {
-        $user = Auth::user();
+        $user = auth()->user();
+        $rotinas = Rotina::query();
+        $criancas = collect(); // Inicializamos a coleção vazia
     
-        // Obtém todas as crianças que o usuário tem acesso
-        if ($user->isPai()) {
-            $criancas = Crianca::whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$user->name])
-                               ->with('rotinas')
-                               ->get();
+        // Se for responsável, filtrar apenas as rotinas das crianças associadas
+        if ($user->isResponsavel()) {
+            // Obtemos as crianças associadas ao responsável logado
+            $criancas = Crianca::whereRaw('LOWER(nomeresponsavel) = ?', [strtolower($user->name)])->get();
+    
+            // Filtramos as rotinas das crianças associadas
+            $rotinas->whereIn('crianca_id', $criancas->pluck('id'));
         } else {
-            $criancas = Crianca::with('rotinas')->get();
+            // Para outros usuários (admin, educador), mostramos todas as crianças
+            $criancas = Crianca::all();
+    
+            // Se não for responsável, permitir filtro por criança
+            if ($request->has('crianca_id') && $request->crianca_id != '') {
+                $rotinas->where('crianca_id', $request->crianca_id);
+            }
         }
     
-        // Filtros opcionais
-        $query = Rotina::query();
-    
-        if ($request->has('crianca_id') && $request->crianca_id) {
-            $query->where('crianca_id', $request->crianca_id);
+        // Filtro por data
+        if ($request->has('data') && $request->data != '') {
+            $rotinas->whereDate('data', $request->data);
         }
     
-        if ($request->has('data') && $request->data) {
-            $query->whereDate('data', $request->data);
-        }
+        $rotinas = $rotinas->get();
     
-        // Obtém as rotinas filtradas
-        $rotinas = $query->whereIn('crianca_id', $criancas->pluck('id'))
-                         ->orderBy('data', 'desc')
-                         ->get();
-    
-        return view('rotinas.index', compact('criancas', 'rotinas'));
+        return view('rotinas.index', compact('rotinas', 'criancas'));
     }
+    
     
     public function create()
     {
@@ -69,6 +71,11 @@ class RotinaController extends Controller
     public function historico($crianca_id)
     {
         $crianca = Crianca::with('rotinas')->findOrFail($crianca_id);
-        return view('criancas.historico', compact('crianca'));
+        
+        // Agora você tem a criança e as rotinas associadas a ela
+        $rotinas = $crianca->rotinas; // Aqui você acessa as rotinas da criança
+    
+        return view('criancas.historico', compact('crianca', 'rotinas'));
     }
+    
 }

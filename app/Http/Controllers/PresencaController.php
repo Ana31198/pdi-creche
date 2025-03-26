@@ -5,75 +5,97 @@ namespace App\Http\Controllers;
 use App\Models\Presenca;
 use App\Models\Crianca;
 use Illuminate\Http\Request;
+use App\Models\Configuracao;
 
 class PresencaController extends Controller
 {
     public function index()
     {
-        $horaLimite = '13:19:00';
+        $configuracao = Configuracao::first();
+        $horaLimite = optional($configuracao)->hora_fechamento ?? '18:00:00';
     
-        // Busca todas as presenças do dia
         $presencas = Presenca::with('crianca')->whereDate('data', today())->get();
-    
-        // Filtra crianças que ainda não saíram após o horário limite
+        
         $alertas = $presencas->filter(function ($presenca) use ($horaLimite) {
             return is_null($presenca->saida) && now()->format('H:i:s') > $horaLimite;
         });
-    
-        return view('presencas.index', compact('presencas', 'alertas'));
-    }
-    
-    
-    public function create()
-    {
-        // Busca todas as crianças para preencher o select do formulário
-        $criancas = Crianca::all();
-        return view('presencas.create', compact('criancas'));
+        
+        return view('presencas.index', compact('presencas', 'alertas', 'configuracao'));
     }
     
     public function store(Request $request)
-{
-    $request->validate([
-        'crianca_id' => 'required|exists:criancas,id',
-        'data'       => 'required|date',
-        'hora'       => 'required|date_format:H:i',
-        'tipo'       => 'required|in:entrada,saida',
-        'responsavel' => 'required|string|max:255',
-    ]);
-
-    Presenca::create($request->all());
-
-    return redirect()->route('presencas.index')
-                     ->with('success', 'Registo de presença efetuado com sucesso!');
-}
-
-    
-    public function show($id)
     {
-        $presenca = Presenca::with('crianca')->findOrFail($id);
-        return view('presencas.show', compact('presenca'));
+        $configuracao = Configuracao::first();
+        $horaAbertura = optional($configuracao)->hora_abertura ?? '07:30';
+        $horaFechamento = optional($configuracao)->hora_fechamento ?? '18:00';
+        
+        if ($request->hora < $horaAbertura || $request->hora > $horaFechamento) {
+            return redirect()->back()->with('error', 'A creche está fechada. Não é possível registrar a entrada.');
+        }
+
+        $request->validate([
+            'crianca_id'  => 'required|exists:criancas,id',
+            'data'        => 'required|date',
+            'hora'        => 'required|date_format:H:i',
+            'responsavel' => 'required|string|max:255',
+        ]);
+
+        Presenca::create($request->all());
+
+        return redirect()->route('presencas.index')->with('success', 'Registro de presença efetuado com sucesso!');
     }
-    
+
+    public function create()
+    {
+        $configuracao = Configuracao::first();
+        $criancas = Crianca::all();
+        $horaAtual = now()->format('H:i');
+        $crecheAberta = ($horaAtual >= optional($configuracao)->hora_abertura && $horaAtual <= optional($configuracao)->hora_fechamento);
+
+        return view('presencas.create', compact('crecheAberta', 'criancas', 'configuracao'));
+    }
+
     public function registar_saida(Request $request, $id)
     {
         $presenca = Presenca::findOrFail($id);
     
-        // Validar que o campo 'retirado_por' foi preenchido
         $request->validate([
             'retirado_por' => 'required|string|max:255',
         ]);
     
-        // Verificar se o nome inserido corresponde ao responsável
         if ($presenca->responsavel !== $request->retirado_por) {
             return redirect()->back()->with('error', 'A criança só pode ser retirada pelo responsável que a entregou!');
         }
     
-        // Registar a saída
         $presenca->saida = now()->format('H:i:s');
         $presenca->retirado_por = $request->retirado_por;
         $presenca->save();
     
         return redirect()->route('presencas.index')->with('success', 'Criança retirada com sucesso.');
     }
-    
+
+    public function showHorario()
+    {
+        $configuracao = Configuracao::first();
+        $presencas = Presenca::with('crianca')->whereDate('data', today())->get();
+
+        return view('presencas.index', compact('configuracao', 'presencas'));
+    }
+   public function salvarHorario(Request $request)
+{
+    // Se não passar um valor, mantém o valor atual
+    $configuracao = Configuracao::first();
+
+    if ($request->hora_abertura) {
+        $configuracao->hora_abertura = $request->hora_abertura;
+    }
+
+    if ($request->hora_fechamento) {
+        $configuracao->hora_fechamento = $request->hora_fechamento;
+    }
+
+    $configuracao->save();
+
+    return redirect()->route('presencas.index');
+}
 }

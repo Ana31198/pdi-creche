@@ -23,6 +23,10 @@ Route::get('/contact', function () {
 });
 
 Route::middleware('auth')->group(function () {
+   
+    Route::get('/presencas/horario', [PresencaController::class, 'showHorario'])->name('presencas.horario');
+    Route::post('/presencas/horario', [PresencaController::class, 'salvarHorario'])->name('presencas.horario');
+    
     Route::get('/criancas', [CriancaController::class, 'index'])->name('criancas.index');
     Route::get('/criancas/create', [CriancaController::class, 'create'])->name('criancas.create'); 
     Route::post('/criancas', [CriancaController::class, 'store'])->name('criancas.store'); 
