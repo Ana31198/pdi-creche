@@ -6,23 +6,41 @@ use App\Models\Presenca;
 use App\Models\Crianca;
 use Illuminate\Http\Request;
 use App\Models\Configuracao;
+use Illuminate\Support\Facades\Auth;
 
 class PresencaController extends Controller
 {
     public function index()
     {
+        $user = Auth::user(); // Obtém o usuário logado
+        
+        // Obtém a configuração da creche
         $configuracao = Configuracao::first();
         $horaLimite = optional($configuracao)->hora_fechamento ?? '18:00:00';
-    
-        $presencas = Presenca::with('crianca')->whereDate('data', today())->get();
         
+        // Se o usuário for responsável (pai, mãe ou tutor)
+        if ($user->isPai()) {
+            // Filtra as presenças para exibir apenas as crianças do responsável logado
+            $criancas = Crianca::doResponsavel($user->name)->pluck('id');
+            
+            // Recupera as presenças dessas crianças para o dia atual
+            $presencas = Presenca::with('crianca')
+                ->whereIn('crianca_id', $criancas)
+                ->whereDate('data', today())
+                ->get();
+        } else {
+            // Admins e educadores podem ver todas as presenças
+            $presencas = Presenca::with('crianca')->whereDate('data', today())->get();
+        }
+    
+        // Filtra os alertas (presenças sem saída, após o horário de fechamento)
         $alertas = $presencas->filter(function ($presenca) use ($horaLimite) {
             return is_null($presenca->saida) && now()->format('H:i:s') > $horaLimite;
         });
         
+        // Retorna a view com os dados filtrados
         return view('presencas.index', compact('presencas', 'alertas', 'configuracao'));
     }
-    
     public function store(Request $request)
     {
         $configuracao = Configuracao::first();
@@ -81,21 +99,22 @@ class PresencaController extends Controller
 
         return view('presencas.index', compact('configuracao', 'presencas'));
     }
-   public function salvarHorario(Request $request)
-{
-    // Se não passar um valor, mantém o valor atual
-    $configuracao = Configuracao::first();
 
-    if ($request->hora_abertura) {
-        $configuracao->hora_abertura = $request->hora_abertura;
+    public function salvarHorario(Request $request)
+    {
+        // Se não passar um valor, mantém o valor atual
+        $configuracao = Configuracao::first();
+
+        if ($request->hora_abertura) {
+            $configuracao->hora_abertura = $request->hora_abertura;
+        }
+
+        if ($request->hora_fechamento) {
+            $configuracao->hora_fechamento = $request->hora_fechamento;
+        }
+
+        $configuracao->save();
+
+        return redirect()->route('presencas.index');
     }
-
-    if ($request->hora_fechamento) {
-        $configuracao->hora_fechamento = $request->hora_fechamento;
-    }
-
-    $configuracao->save();
-
-    return redirect()->route('presencas.index');
-}
 }

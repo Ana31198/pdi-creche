@@ -6,11 +6,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="criancas">Publicações de Rotinas</h1>
 
-        @if(auth()->user()->isEducador())
-            <a href="{{ route('rotinas.create') }}" class="btn btn-primary">Registrar Presença</a>
-        @endif
-        @if(auth()->user()->isAdmin())
-            <a href="{{ route('rotinas.create') }}" class="btn btn-primary">Registrar Rotina</a>
+        @if(auth()->user()->isEducador() || auth()->user()->isAdmin())
+            <a href="{{ route('rotinas.create') }}" class="btn btn-primary">Registar Rotina</a>
         @endif
     </div>
 
@@ -22,6 +19,19 @@
                 <div class="col-md-4">
                     <select name="crianca_id" class="form-select">
                         <option value="">Todas as Crianças</option> <!-- Opção para todas as crianças -->
+                        @foreach($criancas as $crianca)
+                            <option value="{{ $crianca->id }}" 
+                                {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
+                                {{ $crianca->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @elseif(auth()->user()->isEducador())
+                <!-- Filtro por Criança para Educador -->
+                <div class="col-md-4">
+                    <select name="crianca_id" class="form-select">
+                        <option value="">Todas as Crianças</option>
                         @foreach($criancas as $crianca)
                             <option value="{{ $crianca->id }}" 
                                 {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
@@ -71,6 +81,9 @@
             $criancasFiltradas = $criancas;
         } elseif(auth()->user()->isAdmin() && request('crianca_id')) {
             $criancasFiltradas = $criancas->where('id', request('crianca_id'));
+        } elseif(auth()->user()->isEducador()) {
+            // Educador pode ver todas as rotinas ou filtrar por criança
+            $criancasFiltradas = request('crianca_id') ? $criancas->where('id', request('crianca_id')) : $criancas;
         } else {
             // Se for um responsável, mostra apenas as crianças associadas ao responsável
             $criancasFiltradas = $criancas->where('nomeresponsavel', auth()->user()->name);
@@ -87,7 +100,6 @@
 
     @if($rotinasFiltradas->isNotEmpty())
         <!-- Exibir resumo -->
-      
     @else
         <div class="alert alert-warning">Nenhuma rotina encontrada para os filtros aplicados.</div>
     @endif

@@ -4,7 +4,8 @@
 <div class="container mt-4">
     <h1 class="text-center text-primary mb-4">Lista de Presenças</h1>
 
-    <!-- Exibição do Horário de Funcionamento -->
+    <!-- Exibição do Horário de Funcionamento (visível para Educador) -->
+    @if(auth()->user()->isEducador())
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white">
             <strong>Horário de Funcionamento</strong>
@@ -14,14 +15,16 @@
             <p><strong>Fechamento:</strong> {{ $configuracao->hora_fechamento ?? 'Não definido' }}</p>
         </div>
     </div>
+    @endif
 
     <!-- Botão para adicionar uma nova presença -->
+    @if(auth()->user()->isEducador())
     <div class="text-right mb-3">
         <a href="{{ route('presencas.create') }}" class="btn btn-success">
             <i class="fas fa-plus"></i> Adicionar Presença
         </a>
     </div>
-
+    @endif
     @if(auth()->user()->isAdmin())
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-info text-white">
@@ -34,17 +37,17 @@
                     <div class="form-group col-md-6">
                         <label for="hora_abertura">Hora de Abertura</label>
                         <input type="time" id="hora_abertura" name="hora_abertura" class="form-control" 
-       value="{{ old('hora_abertura', $configuracao->hora_abertura ?? '') }}">
-       <small class="text-muted">Deixe em branco para manter o horário atual.</small>
+                               value="{{ old('hora_abertura', $configuracao->hora_abertura ?? '') }}">
+                        <small class="text-muted">Nao mexer para manter o horário atual.</small>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="hora_fechamento">Hora de Fechamento</label>
                         <input type="time" id="hora_fechamento" name="hora_fechamento" class="form-control" 
                                value="{{ old('hora_fechamento', $configuracao->hora_fechamento ?? '') }}">
-                        <small class="text-muted">Deixe em branco para manter o horário atual.</small>
+                        <small class="text-muted">Nao mexer para manter o horário atual.</small>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Salvar Horário</button>
+                <button type="submit" class="btn btn-primary">Guardar Horário</button>
             </form>
         </div>
     </div>
@@ -52,7 +55,7 @@
 
     <!-- Alerta de Crianças Ainda na Creche -->
     @php
-        $alertas = isset($alertas) ? $alertas : collect([]);
+        $alertas = $alertas ?? collect([]);
     @endphp
 
     @if($alertas->count() > 0)
@@ -106,13 +109,17 @@
                         </td>
                         <td>
                             @if(!$presenca->saida)
-                                <form action="{{ route('presencas.registar_saida', $presenca->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <input type="text" name="retirado_por" class="form-control form-control-sm mb-2" placeholder="Nome do responsável" required>
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fas fa-sign-out-alt"></i> Retirar Criança
-                                    </button>
-                                </form>
+                                @if(auth()->user()->isEducador() || auth()->user()->isAdmin()) <!-- Permite a retirada para educador ou administrador -->
+                                    <form action="{{ route('presencas.registar_saida', $presenca->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <input type="text" name="retirado_por" class="form-control form-control-sm mb-2" placeholder="Nome do responsável" required>
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-sign-out-alt"></i> Retirar Criança
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-muted">Somente o educador ou administrador pode registrar a retirada da criança.</span>
+                                @endif
                                 @if(session('error'))
                                     <div class="text-danger mt-2">{{ session('error') }}</div>
                                 @endif
@@ -120,6 +127,9 @@
                                 <span class="text-success">✔️ Retirada</span>
                             @endif
                         </td>
+                        
+                        
+                        
                     </tr>
                 @endforeach
             </tbody>
