@@ -10,32 +10,49 @@ use Illuminate\Support\Facades\Auth;
 
 class PresencaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user(); // Obtém o usuário logado
-
-        // Obtém a configuração da creche
+        $user = Auth::user();
         $configuracao = Configuracao::first();
         $horaLimite = optional($configuracao)->hora_fechamento ?? '18:00:00';
-
-        // Verifica o tipo de usuário para determinar quais presenças carregar
+    
+        $query = Presenca::with('crianca');
+    
+        // Se o usuário for responsável, exibe apenas as presenças das crianças associadas a ele
         if ($user->isPai()) {
-            // Responsáveis só veem presenças das suas crianças
             $criancas = Crianca::doResponsavel($user->name)->pluck('id');
-            $presencas = Presenca::with('crianca')->whereIn('crianca_id', $criancas)->get();
-        } else {
-            // Administradores e educadores veem todas as presenças
-            $presencas = Presenca::with('crianca')->get();
+            $query->whereIn('crianca_id', $criancas);
         }
-
-        // Filtra os alertas (presenças sem saída, após o horário de fechamento)
+    
+        // Filtros
+        if ($request->filled('data')) {
+            $query->whereDate('data', $request->data);
+        }
+    
+        if ($request->filled('crianca_id')) {
+            $query->where('crianca_id', $request->crianca_id);
+        }
+    
+        if ($request->filled('status')) {
+            if ($request->status == 'presentes') {
+                $query->whereNull('saida');
+            } elseif ($request->status == 'retiradas') {
+                $query->whereNotNull('saida');
+            }
+        }
+    
+        $presencas = $query->get();
+    
+        // Filtra os alertas (crianças sem saída após o horário de fechamento)
         $alertas = $presencas->filter(function ($presenca) use ($horaLimite) {
             return is_null($presenca->saida) && now()->format('H:i:s') > $horaLimite;
         });
-
-        // Retorna a view com os dados filtrados
-        return view('presencas.index', compact('presencas', 'alertas', 'configuracao'));
+    
+        $criancas = Crianca::all();
+    
+        return view('presencas.index', compact('presencas', 'alertas', 'configuracao', 'criancas'));
     }
+    
 
     public function store(Request $request)
     {

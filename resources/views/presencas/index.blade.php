@@ -78,6 +78,55 @@
             </button>
         </div>
     @endif
+<!-- Filtros -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-light">
+        <strong>Filtrar Presenças</strong>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('presencas.index') }}" method="GET">
+            <div class="row">
+                <!-- Filtro por Data -->
+                <div class="col-md-3">
+                    <label for="data">Data:</label>
+                    <input type="date" name="data" id="data" class="form-control" value="{{ request('data') }}">
+                </div>
+
+                <!-- Filtro por Criança -->
+                <div class="col-md-3">
+                    <label for="crianca_id">Criança:</label>
+                    <select name="crianca_id" id="crianca_id" class="form-control">
+                        <option value="">Todas</option>
+                        @foreach($criancas as $crianca)
+                            <option value="{{ $crianca->id }}" 
+                                {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
+                                {{ $crianca->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Filtro por Status -->
+                <div class="col-md-3">
+                    <label for="status">Status:</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="presentes" {{ request('status') == 'presentes' ? 'selected' : '' }}>Ainda na Creche</option>
+                        <option value="retiradas" {{ request('status') == 'retiradas' ? 'selected' : '' }}>Retiradas</option>
+                    </select>
+                </div>
+
+                <!-- Botão de Filtrar -->
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
     <!-- Tabela de Presenças -->
     <div class="table-responsive">
