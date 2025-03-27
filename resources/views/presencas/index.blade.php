@@ -26,6 +26,13 @@
     </div>
     @endif
     @if(auth()->user()->isAdmin())
+    <div class="text-right mb-3">
+        <a href="{{ route('presencas.create') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Adicionar Presença
+        </a>
+    </div>
+    @endif
+    @if(auth()->user()->isAdmin())
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-info text-white">
             <strong>Configuração de Horário</strong>
