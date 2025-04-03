@@ -6,10 +6,10 @@
 
 <div class="col-md-6">
     <h3>Informações</h3>
-    <p><strong>Morada:</strong> </p>
-    <p><strong>Telefone:</strong> </p>
-    <p><strong>Email:</strong> </p>
-    <p><strong>Horário de Funcionamento:</strong> Segunda a Sexta, 08:00 - 17:00</p>
+    <p><strong>Morada: Coimbra</strong> </p>
+    <p><strong>Telefone: 239 234 367</strong> </p>
+    <p><strong>Email:</strong> pequenospassos@gmail.com</p>
+    <p><strong>Horário de Funcionamento:</strong> Segunda a Sexta</p>
     
     <!-- Mapa Integrado -->
     <div class="mt-3">

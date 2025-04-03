@@ -1,12 +1,26 @@
 @extends('layouts.navigation')
 
+@section('title', 'Detalhes da Rotina')
+
 @section('content')
+<div class="container mt-4">
     <h1>Detalhes da Rotina</h1>
 
-    <p><strong>Criança:</strong> {{ $rotina->crianca->nome }}</p>
-    <p><strong>Data:</strong> {{ $rotina->data }}</p>
-    <p><strong>Atividade:</strong> {{ $rotina->atividade }}</p>
-    <p><strong>Descrição:</strong> {{ $rotina->descricao }}</p>
+    <div class="card shadow-lg mb-3">
+        <div class="card-body">
+            <h2>Informações da Criança</h2>
+            <p>
+                <strong>Nome:</strong> {{ $rotina->crianca->nome }} <br>
+                <strong>Data:</strong> {{ date('d/m/Y', strtotime($rotina->data)) }} <br>
+            </p>
+            <h2>Atividade</h2>
+            <p>
+                <strong>Atividade:</strong> {{ $rotina->atividade }} <br>
+                <strong>Descrição:</strong> {{ $rotina->descricao }} <br>
+            </p>
+        </div>
+    </div>
 
-    <a href="{{ route('rotinas.index') }}">Voltar</a>
+    <a href="{{ route('rotinas.index') }}" class="btn btn-secondary">Voltar</a>
+</div>
 @endsection
