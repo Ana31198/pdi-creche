@@ -10,19 +10,25 @@ use Illuminate\Support\Facades\Storage;
 
 class FotosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
         $user = Auth::user();
         
         if ($user->isPai()) {
-            $fotos = Foto::whereHas('crianca', function ($query) use ($user) {
-                $query->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$user->name]);
-            })->get();
+            $criancasIds = Crianca::where('nomeresponsavel', $user->name)->pluck('id');
+            $fotosQuery = Foto::whereIn('crianca_id', $criancasIds);
         } else {
-            $fotos = Foto::with('crianca')->get();
+            $fotosQuery = Foto::query();
         }
-    
-        return view('fotos.index', compact('fotos'));
+
+        if ($search) {
+            $fotosQuery->where('titulo', 'like', '%' . $search . '%');
+        }
+        
+        $fotos = $fotosQuery->paginate(9);
+        
+        return view('fotos.index', ['fotos' => $fotos]);
     }
     
     public function create()
