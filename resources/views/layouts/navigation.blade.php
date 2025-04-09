@@ -59,7 +59,7 @@
 
     @yield('content')       
     <footer>
-         <p> 2025 &copy; Creches Ana Simoes Carolina Pereira</p>
+         <p> 2025 &copy; Creches Ana Simoes </p>
     </footer>
 </body>
 </html>
