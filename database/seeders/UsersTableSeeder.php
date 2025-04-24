@@ -22,10 +22,10 @@ class UsersTableSeeder extends Seeder
 
         // Educadora
         User::firstOrCreate(
-            ['email' => 'educadora@creche.com'],
+            ['email' => 'educador@creche.com'],
             [
                 'name' => 'Educadora luisa',
-                'role' => 'educadora',
+                'role' => 'educador',
                 'password' => Hash::make('educadora123'),
             ]
         );

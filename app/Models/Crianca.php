@@ -23,9 +23,10 @@ class Crianca extends Model
     }
     
 
-    public function scopeDoResponsavel($query, $userName)
+    public function scopeDoResponsavel($query, $nome)
     {
-        return $query->whereRaw('LOWER(nomeresponsavel) = LOWER(?)',
-            [$userName]);   
+        return $query->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$nome]);
     }
+    
+    
 }

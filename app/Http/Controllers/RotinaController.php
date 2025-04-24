@@ -1,3 +1,4 @@
+<?php
 namespace App\Http\Controllers;
 
 use App\Models\Rotina;
@@ -13,29 +14,28 @@ class RotinaController extends Controller
         $rotinas = Rotina::query();
         $criancas = collect(); // Inicializamos a coleção vazia
     
-        // Se for responsável, filtrar apenas as rotinas das crianças associadas
         if ($user->isResponsavel()) {
-            // Obtemos as crianças associadas ao responsável logado
-            $criancas = Crianca::whereRaw('LOWER(nomeresponsavel) = ?', [strtolower($user->name)])->get();
+            // Obtem as crianças do responsável
+            $criancas = Crianca::doResponsavel($user->name)->get();
     
-            // Filtramos as rotinas das crianças associadas
+            // Filtra apenas as rotinas dessas crianças
             $rotinas->whereIn('crianca_id', $criancas->pluck('id'));
         } else {
-            // Para outros usuários (admin, educador), mostramos todas as crianças
+            // Admins e educadores veem todas
             $criancas = Crianca::all();
     
-            // Se não for responsável, permitir filtro por criança
-            if ($request->has('crianca_id') && $request->crianca_id != '') {
+            // Permitir filtro por criança
+            if ($request->filled('crianca_id')) {
                 $rotinas->where('crianca_id', $request->crianca_id);
             }
         }
     
         // Filtro por data
-        if ($request->has('data') && $request->data != '') {
+        if ($request->filled('data')) {
             $rotinas->whereDate('data', $request->data);
         }
     
-        $rotinas = $rotinas->get();
+        $rotinas = $rotinas->with('crianca')->get();
     
         return view('rotinas.index', compact('rotinas', 'criancas'));
     }
