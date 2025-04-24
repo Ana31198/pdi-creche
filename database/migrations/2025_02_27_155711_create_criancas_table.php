@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('data_nascimento');
             $table->string('nomeresponsavel');
             $table->string('graudeparentescodoresponsavel');
-            $table->string('contactodoresponavel');
+            $table->string('contactodoresponsavel');
         });
     }
 

@@ -117,17 +117,22 @@ class PresencaController extends Controller
     public function salvarHorario(Request $request)
     {
         $configuracao = Configuracao::first();
-
+    
+        if (!$configuracao) {
+            $configuracao = new Configuracao();
+        }
+    
         if ($request->hora_abertura) {
             $configuracao->hora_abertura = $request->hora_abertura;
         }
-
+    
         if ($request->hora_fechamento) {
             $configuracao->hora_fechamento = $request->hora_fechamento;
         }
-
+    
         $configuracao->save();
-
+    
         return redirect()->route('presencas.index');
     }
+    
 }
