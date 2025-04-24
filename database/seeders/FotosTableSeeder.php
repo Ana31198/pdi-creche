@@ -22,7 +22,7 @@ class FotosTableSeeder extends Seeder
             [
                 'crianca_id' => $crianca->id,
                 'descricao' => 'Foto tirada durante o evento do Dia da Alegria.',
-                'caminho' => 'fotos/exemplo.jpg',
+                'caminho' => 'img/criancas/martim.jpg',
             ]
         );
 
@@ -31,7 +31,7 @@ class FotosTableSeeder extends Seeder
             [
                 'crianca_id' => $crianca->id,
                 'descricao' => 'Momento divertido no parquinho.',
-                'caminho' => 'fotos/parque.jpg',
+                'caminho' => 'img/criancas/martimpasseio.jpg',
             ]
         );
     }

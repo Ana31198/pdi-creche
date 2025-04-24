@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PresencasTableSeeder::class,
             FotosTableSeeder::class,
             RotinasTableSeeder::class,
+            ConfiguracoesTableSeeder::class,
         ]);
     }
     
