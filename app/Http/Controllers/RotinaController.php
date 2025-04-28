@@ -7,27 +7,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RotinaController extends Controller
-{
-    public function index(Request $request)
+{public function index(Request $request)
     {
         $user = auth()->user();
-        $rotinas = Rotina::query();
         $criancas = collect(); // Inicializamos a coleção vazia
+        $rotinas = Rotina::query();
     
+        // Obter as crianças conforme o tipo de utilizador
         if ($user->isResponsavel()) {
-            // Obtem as crianças do responsável
-            $criancas = Crianca::doResponsavel($user->name)->get();
-    
-            // Filtra apenas as rotinas dessas crianças
-            $rotinas->whereIn('crianca_id', $criancas->pluck('id'));
+            $criancas = Crianca::where('nomeresponsavel', $user->name)->get();
         } else {
-            // Admins e educadores veem todas
             $criancas = Crianca::all();
+        }
     
-            // Permitir filtro por criança
-            if ($request->filled('crianca_id')) {
-                $rotinas->where('crianca_id', $request->crianca_id);
-            }
+        // Filtro por criança (aplicável para todos os tipos de utilizadores, se tiverem crianças associadas)
+        if ($request->filled('crianca_id')) {
+            $rotinas->where('crianca_id', $request->crianca_id);
+        } elseif ($user->isResponsavel()) {
+            // Para responsáveis, limitar sempre às crianças associadas
+            $rotinas->whereIn('crianca_id', $criancas->pluck('id'));
         }
     
         // Filtro por data
@@ -35,12 +33,12 @@ class RotinaController extends Controller
             $rotinas->whereDate('data', $request->data);
         }
     
-        $rotinas = $rotinas->with('crianca')->get();
+        $rotinas = $rotinas->get();
     
         return view('rotinas.index', compact('rotinas', 'criancas'));
     }
     
-    
+  
     public function create()
     {
         $criancas = Crianca::all();
@@ -64,8 +62,22 @@ class RotinaController extends Controller
     public function show($id)
     {
         $rotina = Rotina::with('crianca')->findOrFail($id);
+        $user = auth()->user();
+    
+        // Se o utilizador for um responsável
+        if ($user->isResponsavel()) {
+            $crianca = $rotina->crianca;
+    
+            // Verificar se a criança está associada a este responsável (com trim e lowercase para maior robustez)
+            if (!$crianca || strtolower(trim($crianca->nomeresponsavel)) !== strtolower(trim($user->name))) {
+                abort(403, 'Acesso negado. Esta rotina não pertence a uma criança associada a si.');
+            }
+        }
+    
         return view('rotinas.show', compact('rotina'));
     }
+    
+    
 
     public function historico($crianca_id)
     {

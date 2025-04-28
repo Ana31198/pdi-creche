@@ -19,7 +19,7 @@ class PresencaController extends Controller
         $query = Presenca::with('crianca');
     
         // Se o usuário for responsável, exibe apenas as presenças das crianças associadas a ele
-        if ($user->isPai()) {
+        if ($user->isResponsavel()) {
             $criancas = Crianca::doResponsavel($user->name)->pluck('id');
             $query->whereIn('crianca_id', $criancas);
         }

@@ -32,11 +32,11 @@ class UsersTableSeeder extends Seeder
 
         // Pai/Mãe
         User::firstOrCreate(
-            ['email' => 'pai@creche.com'],
+            ['email' => 'responsavel@creche.com'],
             [
                 'name' => 'Ana',
-                'role' => 'pai',
-                'password' => Hash::make('pai123'),
+                'role' => 'responsavel',
+                'password' => Hash::make('responsavel123'),
             ]
         );
     }
