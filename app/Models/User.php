@@ -30,11 +30,7 @@ class User extends Authenticatable
     }
 
     // Verifica se o usuário é Pai (Responsável)
-    public function isPai()
-    {
-        return $this->role === 'pai';
-    }
-
+ 
     // Verifica se o usuário é Responsável (Pai/Mãe)
     public function isResponsavel()
     {

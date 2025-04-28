@@ -15,7 +15,7 @@ class FotosController extends Controller
         $search = $request->input('search');
         $user = Auth::user();
         
-        if ($user->isPai()) {
+        if ($user->isResponsavel()) {
             $criancasIds = Crianca::where('nomeresponsavel', $user->name)->pluck('id');
             $fotosQuery = Foto::whereIn('crianca_id', $criancasIds);
         } else {
