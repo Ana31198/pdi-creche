@@ -10,7 +10,7 @@
     </p>
     
     <div class="row mt-4">
-        <div class="col-md-4 mb-4"> <!-- Adicionando mb-4 aqui -->
+        <div class="col-md-4 mb-4">
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Comunicação Facilitada</h5>
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4"> <!-- Adicionando mb-4 aqui -->
+        <div class="col-md-4 mb-4"> 
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Registo Diário</h5>
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4"> <!-- Adicionando mb-4 aqui -->
+        <div class="col-md-4 mb-4"> 
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Gestão Simplificada</h5>
@@ -39,7 +39,7 @@
     </div>
     
     <div class="row mt-4">
-        <div class="col-md-4 mb-4"> <!-- Adicionando mb-4 aqui -->
+        <div class="col-md-4 mb-4"> 
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Agenda e Eventos</h5>
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4"> <!-- Adicionando mb-4 aqui -->
+        <div class="col-md-4 mb-4"> 
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Segurança e Privacidade</h5>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-4"> <!-- Adicionando mb-4 aqui -->
+        <div class="col-md-4 mb-4"> 
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Galeria de Momentos</h5>

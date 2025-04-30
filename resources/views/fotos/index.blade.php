@@ -8,7 +8,7 @@
     <p class="text-center text-light">Momentos inesquecíveis registrados na creche</p>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5" >
     <div class="d-flex justify-content-end mb-4">
         <a href="{{ route('fotos.create') }}" class="btn btn-success">
             <i class="fas fa-plus-circle"></i> Adicionar Foto

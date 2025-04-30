@@ -5,7 +5,7 @@
 
 
 <div class="col-md-6">
-    <h3>Informações</h3>
+    <h3 class=>Informações</h3>
     <p><strong>Morada: Coimbra</strong> </p>
     <p><strong>Telefone: 239 234 367</strong> </p>
     <p><strong>Email:</strong> pequenospassos@gmail.com</p>
@@ -24,6 +24,6 @@
         </iframe>
     </div>
 </div>
-<br><br>
+
 
 @endsection

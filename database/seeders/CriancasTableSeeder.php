@@ -15,17 +15,17 @@ class CriancasTableSeeder extends Seeder
                 'data_nascimento' => '2020-06-15',
                 'genero' => 'Masculino',
                 'nomeresponsavel' => 'Ana ',
-                'graudeparentescodoresponsavel' => 'mae',
+                'graudeparentescodoresponsavel' => 'Mãe',
                 'contactodoresponsavel' => '912345678',
                 'image' => 'img/criancas/martim.jpg',
             ]
         );
 
         Crianca::firstOrCreate(
-            ['nome' => 'joao '],
+            ['nome' => 'Joao '],
             [
                 'data_nascimento' => '2019-11-03',
-                'genero' => 'Feminino',
+                'genero' => 'Masculino',
                 'nomeresponsavel' => 'Ana ',
                 'graudeparentescodoresponsavel' => 'Mãe',
                 'contactodoresponsavel' => '913456789',

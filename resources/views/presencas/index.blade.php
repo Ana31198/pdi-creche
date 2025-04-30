@@ -8,7 +8,7 @@
     @if(auth()->user()->isEducador())
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white">
-            <strong>Horário de Funcionamento</strong>
+            <strong >Horário de Funcionamento</strong>
         </div>
         <div class="card-body">
             <p><strong>Abertura:</strong> {{ $configuracao->hora_abertura ?? 'Não definido' }}</p>

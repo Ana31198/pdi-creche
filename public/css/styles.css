@@ -7,6 +7,7 @@ header{
 .navbar-nav .nav-link {
     color: #FFA2C6 !important;
   }
+
   
 .navbar-brand img {
     width: 150px;
@@ -65,4 +66,11 @@ margin-top: auto;
 .gallery-header h1, .gallery-header p {
     position: relative;
     z-index: 1;
+}
+.texto{
+       color: #FFA2C6 !important;/* ou a cor que desejares */
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
 }

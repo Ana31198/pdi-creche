@@ -4,7 +4,8 @@
 
 @section('content')
 <div class="container mt-4">
-    <h1 class="text-center text-primary">Adicionar Nova Foto</h1>
+    <h1 class="texto">Adicionar Nova Foto</h1>
+
 
     <form action="{{ route('fotos.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
