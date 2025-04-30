@@ -29,7 +29,7 @@ class User extends Authenticatable
         return $this->role === 'educador';
     }
 
-    // Verifica se o usuário é Pai (Responsável)
+
  
     // Verifica se o usuário é Responsável (Pai/Mãe)
     public function isResponsavel()

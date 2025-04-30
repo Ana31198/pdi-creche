@@ -68,5 +68,7 @@
     </div>
 
 </div>
+<br><br>
+<div class="text-center">
 
 @endsection

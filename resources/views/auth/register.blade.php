@@ -35,7 +35,7 @@
             <label for="role">Função</label>
             <select name="role" id="role" class="form-control">
                 <option value="educador">Educador</option>
-                <option value="pai">Pai</option>
+                <option value="responsavel">Responsavel</option>
             </select>
         </div>
 
