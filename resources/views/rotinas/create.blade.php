@@ -1,4 +1,5 @@
 @extends('layouts.navigation')
+@section('title', 'Rotinas')
 @section('content')
 <div class="container">
     <h1 class="criancas ">Adicionar Rotina</h1>

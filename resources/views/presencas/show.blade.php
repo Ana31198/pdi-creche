@@ -1,5 +1,5 @@
 @extends('layouts.navigation')
-
+@section('title', 'Presencas')
 @section('content')
 <div class="container mt-4">
     <h1 class="criancas">Detalhes da Presença</h1>

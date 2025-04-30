@@ -1,10 +1,10 @@
 @extends('layouts.navigation')
-
+@section('title', 'Rotinas')
 @section('content')
 <div class="container mt-4">
     <!-- Título e Botão de Adição -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="criancas">Publicações de Rotinas</h1>
+        <h1 class="texto">Publicações de Rotinas</h1>
 
         @if(auth()->user()->isEducador() || auth()->user()->isAdmin())
             <a href="{{ route('rotinas.create') }}" class="btn btn-primary">Registar Rotina</a>
@@ -18,7 +18,7 @@
                 <select name="crianca_id" class="form-select">
                     <option value="">Todas as Crianças</option>
                     @foreach($criancas as $crianca)
-                        <option value="{{ $crianca->id }}" {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
+                        <option  value="{{ $crianca->id }}" {{ request('crianca_id') == $crianca->id ? 'selected' : '' }}>
                             {{ $crianca->nome }}
                         </option>
                     @endforeach
@@ -51,7 +51,7 @@
 
             @if($crianca)
                 <div class="mb-4">
-                    <h3 class="border-bottom pb-2 text-primary">{{ $crianca->nome }}</h3>
+                    <h3 class="border-bottom pb-2 ">{{ $crianca->nome }}</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card shadow-lg rounded-3 mb-3">
@@ -65,8 +65,9 @@
                                     </div>
                                     <p class="card-text text-muted">{{ $rotina->atividade }}</p>
                                     <div class="d-flex justify-content-between">
-                                        <a href="{{ route('rotinas.show', $rotina->id) }}" class="btn btn-sm btn-outline-info">
+                                        <a href="{{ route('rotinas.show', $rotina->id) }}" class="btn btn-primary ">
                                             <i class="fas fa-info-circle"></i> Detalhes
+
                                         </a>
                                     </div>
                                 </div>

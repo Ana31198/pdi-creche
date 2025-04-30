@@ -1,5 +1,5 @@
 @extends('layouts.navigation')
-
+@section('title', 'Presenças')
 @section('content')
 <div class="container mt-4">
     <h1 class="text-center text-primary mb-4">Configuração de Horário</h1>

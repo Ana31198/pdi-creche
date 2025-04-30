@@ -1,5 +1,5 @@
 @extends('layouts.navigation')
-@section('title','Creche')
+@section('title','Crianças')
 @section('content')
 
 <div class="container mt-4">

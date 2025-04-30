@@ -1,8 +1,8 @@
 @extends('layouts.navigation')
-
+@section('title', 'Presenças')
 @section('content')
 <div class="container mt-4">
-    <h1 class="text-center text-primary mb-4">Lista de Presenças</h1>
+    <h1 class="texto stext-center mb-4">Lista de Presenças</h1>
 
     <!-- Exibição do Horário de Funcionamento (visível para Educador) -->
     @if(auth()->user()->isEducador())

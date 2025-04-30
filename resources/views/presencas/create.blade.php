@@ -1,6 +1,6 @@
 @extends('layouts.navigation')
 
-@section('title','Registrar Presença')
+@section('title','Presenças')
 
 @section('content')
 <div class="container mt-4">
