@@ -5,6 +5,8 @@
 @section('content')
     <div class="container">
         <h1>Chats</h1>
+
+        
         @foreach ($chats as $chat)
             <div class="chat-item">
                 <p>Chat com: {{ $chat->responsavel->name }}</p>

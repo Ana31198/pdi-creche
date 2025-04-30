@@ -43,4 +43,40 @@ class ChatController extends Controller
     
         return view('chats.show', compact('chat'));
     }
+    public function create()
+{
+    $educadores = User::where('role', 'educador')->get();     // adapta ao teu sistema
+    $responsaveis = User::where('role', 'responsavel')->get(); // idem
+
+    return view('chats.create', compact('educadores', 'responsaveis'));
+}
+public function store(Request $request)
+{
+    $user = auth()->user();
+
+    // Validação
+    $request->validate([
+        'educador_id' => 'required|exists:users,id',
+        'responsavel_id' => 'required|exists:users,id',
+    ]);
+
+    // Verificar se o chat já existe
+    $chatExistente = Chat::where('educador_id', $request->educador_id)
+                         ->where('responsavel_id', $request->responsavel_id)
+                         ->first();
+
+    if ($chatExistente) {
+        return redirect()->route('chats.show', ['chat' => $chatExistente->id])
+                         ->with('info', 'Este chat já existe.');
+    }
+
+    // Criar novo chat
+    $chat = new Chat();
+    $chat->educador_id = $request->educador_id;
+    $chat->responsavel_id = $request->responsavel_id;
+    $chat->save();
+
+    return redirect()->route('chats.show', ['chat' => $chat->id])
+                     ->with('success', 'Novo chat criado com sucesso!');
+}
 }

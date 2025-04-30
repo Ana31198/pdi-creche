@@ -38,15 +38,19 @@ Route::middleware(['auth'])->group(function () {
     // Ver lista de chats
     Route::get('/chats', [ChatController::class, 'index'])->name('chat.index');
     
+    // Formulário para criar novo chat
+    Route::get('/chats/create', [ChatController::class, 'create'])->name('chats.create');
+
+    // Criar chat novo ou redirecionar para existente
+    Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
+    
+
     // Ver chat específico
     Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
-     // Enviar mensagem
 
-    
-     Route::post('/chats/{chatId}/show', [MensagemController::class, 'sendMessage'])->name('chat.send');
-     Route::post('/chats/{chat}/messages', [MensagemController::class, 'store'])->name('chats.messages.store');
-    });
-
+    // Enviar mensagem num chat
+    Route::post('/chats/{chat}/messages', [MensagemController::class, 'store'])->name('chats.messages.store');
+});
 Route::middleware('auth')->group(function () {
    
     Route::get('/presencas/horario', [PresencaController::class, 'showHorario'])->name('presencas.horario');

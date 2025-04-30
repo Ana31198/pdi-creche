@@ -49,7 +49,7 @@
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <span class="nav-link">Sem chats</span>
+                                    <a class="nav-link" href="{{ route('chats.create') }}">Chats</a>
                                 </li>
                             @endif
                         @endauth
