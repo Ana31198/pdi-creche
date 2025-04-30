@@ -10,6 +10,14 @@ use App\Http\Controllers\RotinaController;
 use App\Http\Controllers\PresencaController;
 
 use App\Http\Controllers\FotosController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MensagemController;
+use App\Http\Controllers\UtilizadorController;
+use App\Models\User;
+use App\Models\Chat;
+use App\Models\Mensagem;
+
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -17,10 +25,27 @@ Route::get('/', function () {
     }
     return view('welcome'); // Página padrão para visitantes
 });
-
 Route::get('/contact', function () {
-    return view('contact'); // Certifique-se de que a view 'contact.blade.php' existe
+    return view('contact');
 });
+
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+    
+    // Ver lista de chats
+    Route::get('/chats', [ChatController::class, 'index'])->name('chat.index');
+    
+    // Ver chat específico
+    Route::get('/chats/{chat}', [ChatController::class, 'show'])->name('chats.show');
+     // Enviar mensagem
+
+    
+     Route::post('/chats/{chatId}/show', [MensagemController::class, 'sendMessage'])->name('chat.send');
+     Route::post('/chats/{chat}/messages', [MensagemController::class, 'store'])->name('chats.messages.store');
+    });
 
 Route::middleware('auth')->group(function () {
    
@@ -63,6 +88,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
 });
 
 require __DIR__.'/auth.php';

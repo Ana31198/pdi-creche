@@ -42,4 +42,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(Crianca::class);
     }
+    public function chatsAsEducador()
+    {
+        return $this->hasMany(Chat::class, 'educador_id');
+    }
+
+    public function chatsAsResponsavel()
+    {
+        return $this->hasMany(Chat::class, 'responsavel_id');
+    }
+    public function chats()
+    {
+        return $this->hasMany(Chat::class, 'educador_id'); // Ou 'responsavel_id' conforme a relação
+    }
+
+    // Relacionamento com as mensagens
+    public function messages()
+    {
+        return $this->hasMany(Mensagem::class);
+    }
+
 }
