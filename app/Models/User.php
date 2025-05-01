@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Crianca;
+use App\Models\Chat;
+use App\Models\Message;
 
 class User extends Authenticatable
 {
@@ -29,37 +32,27 @@ class User extends Authenticatable
         return $this->role === 'educador';
     }
 
-
- 
-    // Verifica se o usuário é Responsável (Pai/Mãe)
+    // Verifica se o usuário é Responsável
     public function isResponsavel()
     {
-        return $this->role === 'responsavel'; // Ou ajusta a lógica conforme necessário
+        return $this->role === 'responsavel';
     }
 
-    // Relação com Crianças (caso um responsável tenha várias crianças)
+    // Relação com crianças (ex: responsáveis)
     public function criancas()
     {
         return $this->hasMany(Crianca::class);
     }
-    public function chatsAsEducador()
-    {
-        return $this->hasMany(Chat::class, 'educador_id');
-    }
 
-    public function chatsAsResponsavel()
-    {
-        return $this->hasMany(Chat::class, 'responsavel_id');
-    }
+    // Relação com chats (pivot chat_user)
     public function chats()
     {
-        return $this->hasMany(Chat::class, 'educador_id'); // Ou 'responsavel_id' conforme a relação
+        return $this->belongsToMany(Chat::class, 'chat_user')->withTimestamps();
     }
 
-    // Relacionamento com as mensagens
+    // Relação com mensagens
     public function messages()
     {
-        return $this->hasMany(Mensagem::class);
+        return $this->hasMany(Message::class);
     }
-
 }

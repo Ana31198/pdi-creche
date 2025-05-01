@@ -37,22 +37,30 @@
                         <li class="nav-item"><a class="nav-link" href="/contact">Contacto</a></li>
 
                         {{-- Link do Chat para utilizadores autenticados --}}
-                        @auth
-                            @php
-                                $chats = \App\Models\Chat::where('educador_id', Auth::id())
-                                            ->orWhere('responsavel_id', Auth::id())
-                                            ->get();
-                            @endphp
-                            @if($chats->count() > 0)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('chat.index') }}">Chats</a>
-                                </li>
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('chats.create') }}">Chats</a>
-                                </li>
-                            @endif
-                        @endauth
+                     {{-- Link do Chat para utilizadores autenticados --}}
+                     @auth
+                     @php
+                         $unreadCount = \App\Models\Chat::whereHas('users', function ($q) {
+                                 $q->where('user_id', Auth::id());
+                             })
+                             ->with(['messages' => function ($query) {
+                                 $query->where('is_read', false)
+                                       ->where('user_id', '!=', Auth::id());
+                             }])
+                             ->get()
+                             ->flatMap->messages
+                             ->count();
+                     @endphp
+                 
+                     <li class="nav-item">
+                         <a class="nav-link d-flex align-items-center" href="{{ route('chat.index') }}">
+                             Chats
+                             @if($unreadCount > 0)
+                                 <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
+                             @endif
+                         </a>
+                     </li>
+                 @endauth
 
                         @guest
                             <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registar</a></li>

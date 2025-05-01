@@ -10,9 +10,7 @@ class CreateChatsTable extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('educador_id')->constrained('users');  // Educador (relacionado com a tabela de utilizadores)
-            $table->foreignId('responsavel_id')->constrained('users'); // Responsável (relacionado com a tabela de utilizadores)
-            $table->timestamps();
+               $table->timestamps();
         });
     }
 

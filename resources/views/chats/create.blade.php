@@ -14,23 +14,17 @@
         @csrf
 
         <div class="form-group mb-3">
-            <label for="responsavel_id">Responsável</label>
-            <select name="responsavel_id" id="responsavel_id" class="form-control" required>
-                <option value="">-- Escolher Responsável --</option>
-                @foreach($responsaveis as $responsavel)
-                    <option value="{{ $responsavel->id }}">{{ $responsavel->name }}</option>
+            <label>Selecionar Utilizadores:</label>
+            <div class="form-check">
+                @foreach($utilizadores as $user)
+                    <div class="mb-1">
+                        <input class="form-check-input" type="checkbox" name="participants[]" value="{{ $user->id }}" id="user_{{ $user->id }}">
+                        <label class="form-check-label" for="user_{{ $user->id }}">
+                            {{ $user->name }} ({{ $user->role }})
+                        </label>
+                    </div>
                 @endforeach
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="educador_id">Educador (opcional)</label>
-            <select name="educador_id" id="educador_id" class="form-control">
-                <option value="">-- Escolher Educador (opcional) --</option>
-                @foreach($educadores as $educador)
-                    <option value="{{ $educador->id }}">{{ $educador->name }}</option>
-                @endforeach
-            </select>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Criar Chat</button>

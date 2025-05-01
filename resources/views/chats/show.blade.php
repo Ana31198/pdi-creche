@@ -3,30 +3,29 @@
 @section('title', 'Chat')
 
 @section('content')
-    <div class="container">
-        <h1>Chat com: 
-            {{ auth()->id() === $chat->educador_id ? $chat->responsavel->name : $chat->educador->name }}
+    <div class="container mt-4">
+        <h1>
+            Chat com: 
+            {{ $chat->users->where('id', '!=', auth()->id())->pluck('name')->join(', ') }}
         </h1>
 
+        <hr>
+
         <div class="messages mb-4">
-            @forelse ($chat->messages as $message)
-                <div class="message mb-2 p-2 border rounded">
-                    <p><strong>{{ $message->user->name }}:</strong> {{ $message->message }}</p>
-                    <small>
-                        {{ $message->created_at ? $message->created_at->format('d/m/Y H:i') : 'Data indisponível' }}
-                    </small>
+            @foreach($chat->messages as $message)
+                <div class="mb-2 p-2 border rounded @if($message->user_id === auth()->id()) bg-light @endif">
+                    <strong>{{ $message->user->name }}:</strong> {{ $message->message }}<br>
+                    <small class="text-muted">{{ $message->created_at->format('d/m/Y H:i') }}</small>
                 </div>
-            @empty
-                <p>Sem mensagens neste chat.</p>
-            @endforelse
+            @endforeach
         </div>
 
         <form action="{{ route('chats.messages.store', $chat->id) }}" method="POST">
             @csrf
             <div class="form-group mb-2">
-                <textarea name="message" class="form-control" placeholder="Escreva a sua mensagem..." rows="3" required></textarea>
+                <textarea name="message" class="form-control" rows="3" placeholder="Escreve a tua mensagem..." required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+            <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
     </div>
 @endsection

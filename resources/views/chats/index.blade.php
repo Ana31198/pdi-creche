@@ -9,20 +9,16 @@
     @if($chats->isEmpty())
         <div class="alert alert-info">Ainda não tens chats iniciados.</div>
     @else
-        <div class="row">
+        <ul class="list-group">
             @foreach($chats as $chat)
-            <li>
-                <a href="{{ route('chats.show', $chat->id) }}">
-                    Chat com 
-                    @if ($chat->educador_id)
-                        {{ $chat->educador ? $chat->educador->name : 'Educador não encontrado' }}
-                    @else
-                        {{ $chat->responsavel ? $chat->responsavel->name : 'Responsável não encontrado' }}
-                    @endif
-                </a>
-            </li>
-        @endforeach
-        </div>
+                <li class="list-group-item">
+                    <a href="{{ route('chats.show', $chat->id) }}">
+                        Chat com: 
+                        {{ $chat->users->where('id', '!=', auth()->id())->pluck('name')->join(', ') }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
     @endif
 
     <div class="mt-4">

@@ -11,16 +11,10 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
     
-        // Educador vê os chats onde é educador, responsável vê os chats onde é responsável
-        if ($user->isEducador()) {
-            $chats = Chat::where('educador_id', $user->id)->get();
-        } elseif ($user->isResponsavel()) {
-            $chats = Chat::where('responsavel_id', $user->id)->get();
-        } else {
-            abort(403, 'Tipo de utilizador inválido.');
-        }
+        // Busca chats onde o utilizador participa (nova lógica)
+        $chats = $user->chats()->with('users')->get();
     
         return view('chats.index', compact('chats'));
     }
@@ -28,66 +22,50 @@ class ChatController extends Controller
     public function show(Chat $chat)
     {
         $userId = auth()->id();
-    
+
         // Verificar se o utilizador pertence ao chat
-        if ($chat->educador_id !== $userId && $chat->responsavel_id !== $userId) {
+        if (!$chat->users->contains($userId)) {
             return redirect()->route('dashboard')->with('error', 'Sem permissão.');
         }
-    
-        // Marcar mensagens do outro utilizador como lidas
+
+        // Marcar mensagens dos outros utilizadores como lidas
         $chat->messages()
              ->where('user_id', '!=', $userId)
              ->where('is_read', false)
              ->update(['is_read' => true]);
-    
+
         $chat->load('messages.user');
-    
+
         return view('chats.show', compact('chat'));
     }
 
     public function create()
     {
-        $educadores = User::where('role', 'educador')->get();     // Adapte ao seu sistema
-        $responsaveis = User::where('role', 'responsavel')->get(); // Idem
-
-        return view('chats.create', compact('educadores', 'responsaveis'));
+        $utilizadores = User::where('id', '!=', auth()->id())->get();
+        return view('chats.create', compact('utilizadores'));
     }
 
     public function store(Request $request)
     {
-        // Validação para garantir que ambos os campos educador_id e responsavel_id sejam preenchidos
         $request->validate([
-            'educador_id' => 'nullable|exists:users,id', // Educador opcional
-            'responsavel_id' => 'required|exists:users,id', // Responsável obrigatório
+            'participants' => 'required|array|min:1',
+            'participants.*' => 'exists:users,id|different:' . auth()->id(),
         ]);
-    
-        // Se for um chat entre dois responsáveis (sem educador)
-        if ($request->responsavel_id && !$request->educador_id) {
-            // Verificar se já existe um chat entre os dois responsáveis
-            $existingChat = Chat::where('responsavel_id', $request->responsavel_id)
-                                ->whereNull('educador_id')  // Garantir que não há educador
-                                ->first();
-    
-            if ($existingChat) {
-                return redirect()->route('chats.show', $existingChat->id)
-                                 ->with('error', 'Este chat já foi iniciado.');
-            }
-    
-            // Criar o chat entre dois responsáveis
-            $chat = new Chat();
-            $chat->responsavel_id = $request->responsavel_id;
-            $chat->educador_id = null;  // Não há educador neste chat
-            $chat->save();
-    
-            return redirect()->route('chats.show', $chat->id)->with('success', 'Chat iniciado com sucesso!');
+
+        $participants = array_merge($request->participants, [auth()->id()]);
+        sort($participants);
+
+        $existing = Chat::whereHas('users', function ($q) use ($participants) {
+            $q->whereIn('user_id', $participants);
+        }, '=', count($participants))->first();
+
+        if ($existing) {
+            return redirect()->route('chats.show', $existing)->with('info', 'Este chat já existe.');
         }
-    
-        // Caso contrário, criar o chat entre educador e responsável
-        $chat = new Chat();
-        $chat->responsavel_id = $request->responsavel_id;
-        $chat->educador_id = $request->educador_id;
-        $chat->save();
-    
-        return redirect()->route('chats.show', $chat->id)->with('success', 'Chat iniciado com sucesso!');
+
+        $chat = Chat::create();
+        $chat->users()->attach($participants);
+
+        return redirect()->route('chats.show', $chat);
     }
 }
