@@ -14,21 +14,21 @@
         @csrf
 
         <div class="form-group mb-3">
-            <label for="educador_id">Educador</label>
-            <select name="educador_id" id="educador_id" class="form-control" required>
-                <option value="">-- Escolher Educador --</option>
-                @foreach($educadores as $educador)
-                    <option value="{{ $educador->id }}">{{ $educador->name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
             <label for="responsavel_id">Responsável</label>
             <select name="responsavel_id" id="responsavel_id" class="form-control" required>
                 <option value="">-- Escolher Responsável --</option>
                 @foreach($responsaveis as $responsavel)
                     <option value="{{ $responsavel->id }}">{{ $responsavel->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="educador_id">Educador (opcional)</label>
+            <select name="educador_id" id="educador_id" class="form-control">
+                <option value="">-- Escolher Educador (opcional) --</option>
+                @foreach($educadores as $educador)
+                    <option value="{{ $educador->id }}">{{ $educador->name }}</option>
                 @endforeach
             </select>
         </div>
