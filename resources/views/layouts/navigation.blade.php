@@ -19,55 +19,59 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('dashboard') }}">
-                    <img src="/imgs/logotipo.jpeg" alt="Logotipo">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
+                    <img src="/imgs/logotipo.jpeg" alt="Logotipo" class="me-2">
+           
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
+    
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         <li class="nav-item"><a class="nav-link" href="/criancas">Crianças</a></li>
                         <li class="nav-item"><a class="nav-link" href="/rotinas">Rotinas</a></li>
                         <li class="nav-item"><a class="nav-link" href="/presencas">Presenças</a></li>
                         <li class="nav-item"><a class="nav-link" href="/fotos">Fotografias</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">Contacto</a></li>
-
-                        {{-- Link do Chat para utilizadores autenticados --}}
-                     {{-- Link do Chat para utilizadores autenticados --}}
-                     @auth
-                     @php
-                         $unreadCount = \App\Models\Chat::whereHas('users', function ($q) {
-                                 $q->where('user_id', Auth::id());
-                             })
-                             ->with(['messages' => function ($query) {
-                                 $query->where('is_read', false)
-                                       ->where('user_id', '!=', Auth::id());
-                             }])
-                             ->get()
-                             ->flatMap->messages
-                             ->count();
-                     @endphp
-                 
-                     <li class="nav-item">
-                         <a class="nav-link d-flex align-items-center" href="{{ route('chat.index') }}">
-                             Chats
-                             @if($unreadCount > 0)
-                                 <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
-                             @endif
-                         </a>
-                     </li>
-                 @endauth
-
+    
+                        {{-- Link para Chats com contador de mensagens não lidas --}}
+                        @auth
+                            @php
+                                $unreadCount = \App\Models\Chat::whereHas('users', function ($q) {
+                                        $q->where('user_id', Auth::id());
+                                    })
+                                    ->with(['messages' => function ($query) {
+                                        $query->where('is_read', false)
+                                              ->where('user_id', '!=', Auth::id());
+                                    }])
+                                    ->get()
+                                    ->flatMap->messages
+                                    ->count();
+                            @endphp
+    
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('chat.index') }}">
+                                    Chats
+                                    @if($unreadCount > 0)
+                                        <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endauth
+    
+                        {{-- Login/Register ou Menu do Utilizador --}}
                         @guest
                             <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registar</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Entrar</a></li>
                         @else
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
