@@ -20,37 +20,38 @@ class User extends Authenticatable
         'role',
     ];
 
-    // Verifica se o usuário é Admin
+  
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
 
-    // Verifica se o usuário é Educador
+ 
+    
     public function isEducador()
     {
         return $this->role === 'educador';
     }
 
-    // Verifica se o usuário é Responsável
+    
     public function isResponsavel()
     {
         return $this->role === 'responsavel';
     }
 
-    // Relação com crianças (ex: responsáveis)
+
     public function criancas()
     {
         return $this->hasMany(Crianca::class);
     }
 
-    // Relação com chats (pivot chat_user)
+
     public function chats()
     {
         return $this->belongsToMany(Chat::class, 'chat_user')->withTimestamps();
     }
 
-    // Relação com mensagens
+
     public function messages()
     {
         return $this->hasMany(Message::class);

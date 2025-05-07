@@ -2,7 +2,6 @@
 @section('title', 'Rotinas')
 @section('content')
 <div class="container mt-4">
-    <!-- Título e Botão de Adição -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="texto">Publicações de Rotinas</h1>
 
@@ -11,7 +10,7 @@
         @endif
     </div>
 
-    <!-- Filtros -->
+
     <form method="GET" action="{{ route('rotinas.index') }}" class="mb-3">
         <div class="row">
             <div class="col-md-4">
@@ -35,14 +34,13 @@
         </div>
     </form>
 
-    <!-- Mensagem de Sucesso -->
     @if(session('success'))
         <div class="alert alert-success fade show" role="alert">
             <i class="fas fa-check-circle"></i> {{ session('success') }}
         </div>
     @endif
 
-    <!-- Lista de Rotinas -->
+
     @if($rotinas->isNotEmpty())
         @foreach($rotinas as $rotina)
             @php

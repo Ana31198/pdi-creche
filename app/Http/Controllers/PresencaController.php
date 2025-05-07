@@ -18,13 +18,12 @@ class PresencaController extends Controller
     
         $query = Presenca::with('crianca');
     
-        // Se o usuário for responsável, exibe apenas as presenças das crianças associadas a ele
-        if ($user->isResponsavel()) {
+         if ($user->isResponsavel()) {
             $criancas = Crianca::doResponsavel($user->name)->pluck('id');
             $query->whereIn('crianca_id', $criancas);
         }
     
-        // Filtros
+     
         if ($request->filled('data')) {
             $query->whereDate('data', $request->data);
         }
@@ -43,7 +42,7 @@ class PresencaController extends Controller
     
         $presencas = $query->get();
     
-        // Filtra os alertas (crianças sem saída após o horário de fechamento)
+    
         $alertas = $presencas->filter(function ($presenca) use ($horaLimite) {
             return is_null($presenca->saida) && now()->format('H:i:s') > $horaLimite;
         });
@@ -108,7 +107,7 @@ class PresencaController extends Controller
     public function showHorario()
     {
         $configuracao = Configuracao::first();
-        // Agora sempre carrega todas as presenças
+  
         $presencas = Presenca::with('crianca')->get();
 
         return view('presencas.index', compact('configuracao', 'presencas'));

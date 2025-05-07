@@ -40,35 +40,33 @@
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
-                <!-- Nome -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome</label>
                     <input id="name" type="text" name="name" class="form-control" value="{{ old('name') }}" required autofocus>
                     @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
 
-                <!-- Email -->
+
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input id="email" type="email" name="email" class="form-control" value="{{ old('email') }}" required>
                     @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
 
-                <!-- Password -->
+      
                 <div class="mb-3">
                     <label for="password" class="form-label">Palavra-passe</label>
                     <input id="password" type="password" name="password" class="form-control" required>
                     @error('password') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
 
-                <!-- Confirmar Password -->
+        
                 <div class="mb-3">
                     <label for="password_confirmation" class="form-label">Confirmar Palavra-passe</label>
                     <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required>
                     @error('password_confirmation') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
 
-                <!-- Role -->
                 <div class="mb-4">
                     <label for="role" class="form-label">Função</label>
                     <select name="role" id="role" class="form-select" required>

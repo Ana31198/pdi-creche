@@ -5,7 +5,7 @@
 <div class="container mt-4">
     <h1 class="criancas">Lista de Crianças</h1>
     
-    <!-- Botão Adicionar Criança -->
+
     <div class="d-flex justify-content-end mb-4">          
         @if(auth()->user()->isEducador())
             <a href="{{ route('criancas.create') }}" class="btn btn-primary mb-3">Adiconar uma crianca </a>
@@ -15,7 +15,6 @@
     @endif
     </div>
 
-    <!-- Lista de Crianças -->
     <div class="row">
         @foreach($criancas as $crianca)
             <div class="col-md-4 mb-4">
@@ -31,7 +30,7 @@
                             <strong>Contato:</strong> {{ $crianca->contactodoresponsavel }}
                         </p>
 
-                        <!-- Botões de Ação -->
+              
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('criancas.show', $crianca->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-info-circle"></i> Saber mais

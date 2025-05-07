@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="container mt-4">
-    <!-- Barra de Pesquisa -->
+«
     <div id="search-container" class="col-md-12 mb-4">
         <h1 class="crianca">Pesquise uma Criança</h1>
         <form action="{{ route('dashboard') }}" method="GET">
@@ -17,7 +17,6 @@
         </form>
     </div>
 
-    <!-- Título Lista de Crianças -->
     <h1 class="criancas">Lista de Crianças</h1>
     
     @if($criancas->isEmpty())
@@ -27,10 +26,10 @@
             @foreach($criancas as $crianca)
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg rounded-lg overflow-hidden transform-hover">
-                        <!-- Imagem da Criança -->
+                      
                         <img src="{{ asset($crianca->image) }}" alt="{{ $crianca->nome }}" class="img-fluid card-img-top" style="height: 250px; object-fit: cover;">
                         <div class="card-body">
-                            <!-- Nome da Criança -->
+                  
                             <h5 class="card-title text-center">{{ $crianca->nome }}</h5>
                             <p class="card-text">
                                 <strong>Gênero:</strong> {{ $crianca->genero }} <br>
@@ -39,7 +38,6 @@
                                 <strong>Grau do responsável:</strong> {{ $crianca->graudeparentescodoresponsavel }} <br>
                                 <strong>Contato:</strong> {{ $crianca->contactodoresponsavel }}
                             </p>
-                            <!-- Botões de Ação -->
                             <div class="d-flex justify-content-between">
                                 <a href="{{ route('criancas.show', $crianca->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-info-circle"></i> Saber mais

@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <h1 class="texto stext-center mb-4">Lista de Presenças</h1>
 
-    <!-- Exibição do Horário de Funcionamento (visível para Educador) -->
+
     @if(auth()->user()->isEducador())
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white">
@@ -17,7 +17,7 @@
     </div>
     @endif
 
-    <!-- Botão para adicionar uma nova presença -->
+ 
     @if(auth()->user()->isEducador())
     <div class="text-right mb-3">
         <a href="{{ route('presencas.create') }}" class="btn btn-success">
@@ -60,7 +60,6 @@
     </div>
     @endif
 
-    <!-- Alerta de Crianças Ainda na Creche -->
     @php
         $alertas = $alertas ?? collect([]);
     @endphp
@@ -78,7 +77,7 @@
             </button>
         </div>
     @endif
-<!-- Filtros -->
+
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-light">
         <strong>Filtrar Presenças</strong>
@@ -86,13 +85,13 @@
     <div class="card-body">
         <form action="{{ route('presencas.index') }}" method="GET">
             <div class="row">
-                <!-- Filtro por Data -->
+      
                 <div class="col-md-3">
                     <label for="data">Data:</label>
                     <input type="date" name="data" id="data" class="form-control" value="{{ request('data') }}">
                 </div>
 
-                <!-- Filtro por Criança -->
+              
                 <div class="col-md-3">
                     <label for="crianca_id">Criança:</label>
                     <select name="crianca_id" id="crianca_id" class="form-control">
@@ -106,7 +105,7 @@
                     </select>
                 </div>
 
-                <!-- Filtro por Status -->
+         
                 <div class="col-md-3">
                     <label for="status">Status:</label>
                     <select name="status" id="status" class="form-control">
@@ -116,7 +115,7 @@
                     </select>
                 </div>
 
-                <!-- Botão de Filtrar -->
+               
                 <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="fas fa-filter"></i> Filtrar
@@ -127,8 +126,6 @@
     </div>
 </div>
 
-
-    <!-- Tabela de Presenças -->
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover">
             <thead class="thead-dark">

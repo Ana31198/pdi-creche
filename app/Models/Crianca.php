@@ -16,7 +16,6 @@ class Crianca extends Model
         'contactodoresponsavel', 'image'
     ];
 
-    // Definir o relacionamento com o modelo Rotina
     public function rotinas()
     {
         return $this->hasMany(Rotina::class, 'crianca_id');

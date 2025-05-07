@@ -13,7 +13,7 @@ class ChatController extends Controller
     {
         $user = Auth::user();
     
-        // Busca chats onde o utilizador participa (nova lógica)
+       
         $chats = $user->chats()->with('users')->get();
     
         return view('chats.index', compact('chats'));
@@ -23,12 +23,11 @@ class ChatController extends Controller
     {
         $userId = auth()->id();
 
-        // Verificar se o utilizador pertence ao chat
+  
         if (!$chat->users->contains($userId)) {
             return redirect()->route('dashboard')->with('error', 'Sem permissão.');
         }
 
-        // Marcar mensagens dos outros utilizadores como lidas
         $chat->messages()
              ->where('user_id', '!=', $userId)
              ->where('is_read', false)

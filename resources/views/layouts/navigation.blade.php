@@ -39,7 +39,6 @@
                         <li class="nav-item"><a class="nav-link" href="/fotos">Fotografias</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">Contacto</a></li>
     
-                        {{-- Link para Chats com contador de mensagens não lidas --}}
                         @auth
                             @php
                                 $unreadCount = \App\Models\Chat::whereHas('users', function ($q) {
@@ -64,8 +63,7 @@
                             </li>
                         @endauth
     
-                        {{-- Login/Register ou Menu do Utilizador --}}
-                        @guest
+                            @guest
                             <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registar</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Entrar</a></li>
                         @else

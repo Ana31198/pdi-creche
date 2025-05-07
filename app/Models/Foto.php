@@ -11,7 +11,7 @@ class Foto extends Model
 
     protected $fillable = ['titulo', 'descricao', 'caminho', 'crianca_id'];
 
-    // Relação: Foto pertence a uma Criança
+
     public function crianca()
     {
         return $this->belongsTo(Crianca::class);

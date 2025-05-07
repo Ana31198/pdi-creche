@@ -16,7 +16,7 @@ class CriancaController extends Controller
         if ($user->isResponsavel()) {
             $criancas = Crianca::doResponsavel($user->name)->get();
         } else {
-            $criancas = Crianca::all(); // Admins e educadores veem todas as crianças
+            $criancas = Crianca::all(); 
         }
     
         return view('criancas.index', compact('criancas'));
@@ -51,7 +51,7 @@ class CriancaController extends Controller
     {
         $user = Auth::user();
     
-        // Se for pai, busca a criança apenas se ele for o responsável
+       
         if ($user->isResponsavel()) {
             $crianca = Crianca::where('id', $id)
                 ->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$user->name])

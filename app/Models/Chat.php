@@ -13,13 +13,13 @@ class Chat extends Model
 
     protected $fillable = [];
 
-    // Novo relacionamento multiutilizador
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'chat_user')->withTimestamps();
     }
     
-    // Relacionamento com as mensagens
+
     public function messages()
     {
         return $this->hasMany(Message::class);

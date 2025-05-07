@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <h1 class="text-center text-primary mb-4">Configuração de Horário</h1>
 
-    <!-- Formulário para configurar hora de abertura e fechamento -->
+
     @if(auth()->user()->isAdmin())
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-info text-white">
