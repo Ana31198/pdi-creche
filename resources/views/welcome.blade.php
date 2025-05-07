@@ -32,7 +32,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Gestão Simplificada</h5>
-                    <p class="card-text">Facilidade na gestão de matrículas, presenças, pagamentos e documentos da criança, tudo em um só lugar.</p>
+                    <p class="card-text">Facilidade na gestão de  presenças,  tudo em um só lugar.</p>
                 </div>
             </div>
         </div>
