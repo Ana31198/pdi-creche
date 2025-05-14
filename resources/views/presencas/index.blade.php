@@ -3,8 +3,6 @@
 @section('content')
 <div class="container mt-4">
     <h1 class="texto stext-center mb-4">Lista de Presenças</h1>
-
-
     @if(auth()->user()->isEducador())
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white">
@@ -162,7 +160,7 @@
                         </td>
                         <td>
                             @if(!$presenca->saida)
-                                @if(auth()->user()->isEducador() || auth()->user()->isAdmin()) <!-- Permite a retirada para educador ou administrador -->
+                                @if(auth()->user()->isEducador() || auth()->user()->isAdmin()) 
                                     <form action="{{ route('presencas.registar_saida', $presenca->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         <input type="text" name="retirado_por" class="form-control form-control-sm mb-2" placeholder="Nome do responsável" required>
@@ -191,27 +189,3 @@
 </div>
 @endsection
 
-@section('styles')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        .table th, .table td {
-            vertical-align: middle;
-        }
-        .btn-success {
-            font-size: 14px;
-        }
-        .alert-warning {
-            background-color: #fff3cd;
-        }
-        .table th {
-            background-color: #007bff;
-            color: white;
-        }
-        .table-success {
-            background-color: #d4edda !important;
-        }
-        .table-warning {
-            background-color: #fff3cd !important;
-        }
-    </style>
-@endsection
