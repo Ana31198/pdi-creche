@@ -14,17 +14,25 @@ Este projeto é uma aplicação web desenvolvida em Laravel para facilitar a com
 <p>git clone https://github.com/usuario/projeto-creche.git</p>
 
 <p>cd projeto-creche </p>
+
 composer install
+
 cp .env.example .env
+
 php artisan key:generate
 
 Atualizar as credenciais no .env:
 
 DB_CONNECTION=mysql
+
 DB_HOST=127.0.0.1
+
 DB_PORT=3306
+
 DB_DATABASE=creche
+
 DB_USERNAME=root
+
 DB_PASSWORD=
 
 Usar o comando para ter contas principais de login criadas
@@ -34,15 +42,24 @@ php artisan migrate --seed
  Acessos de Teste
 
 admin@creche.com  password: admin123
+
 responsavel@creche.com password: responsavel123
+
 educador@creche.com password: educadora123
 
+
 Estrutura dos documentos importantes 
+
 resources/views       # Interfaces (Blade)
+
 app/Http/Controllers  # Lógica dos controladores
+
 app/Models            # Modelos da base de dados
+
 routes/web.php        # Definição das rotas
+
 public/               # Assets públicos (imagens, CSS, etc)
+
 database/migrations   # Estrutura da base de dados
 
 Notas Finais
@@ -50,5 +67,6 @@ Notas Finais
 Certifique-se de que a pasta storage/ e bootstrap/cache/ têm permissões de escrita.
 
 Todas as credenciais de teste estão incluídas acima.
+
 © 2025 - Creche Ana Simões | Projeto Académico
 
