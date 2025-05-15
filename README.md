@@ -11,8 +11,9 @@ Plataforma de Gestão da Creche Ana Simões
 
 Este projeto é uma aplicação web desenvolvida em Laravel para facilitar a comunicação entre educadores e responsáveis, bem como a gestão de rotinas, presenças, documentos e eventos na creche.
 
-git clone https://github.com/usuario/projeto-creche.git
-cd projeto-creche
+<p>git clone https://github.com/usuario/projeto-creche.git</p>
+
+<p>cd projeto-creche </p>
 composer install
 cp .env.example .env
 php artisan key:generate
