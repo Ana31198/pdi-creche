@@ -11,33 +11,7 @@ Plataforma de Gestão da Creche Ana Simões
 
 Este projeto é uma aplicação web desenvolvida em Laravel para facilitar a comunicação entre educadores e responsáveis, bem como a gestão de rotinas, presenças, documentos e eventos na creche.
 
-<p>git clone https://github.com/Ana31198/pdi-creche</p>
 
-<p>cd projeto-creche </p>
-
-composer install
-
-cp .env.example .env
-
-php artisan key:generate
-
-Atualizar as credenciais no .env:
-
-DB_CONNECTION=mysql
-
-DB_HOST=127.0.0.1
-
-DB_PORT=3306
-
-DB_DATABASE=creche
-
-DB_USERNAME=root
-
-DB_PASSWORD=
-
-Usar o comando para ter contas principais de login criadas
-
-php artisan migrate --seed 
 
  Acessos de Teste
 
@@ -62,9 +36,8 @@ public/               # Assets públicos (imagens, CSS, etc)
 
 database/migrations   # Estrutura da base de dados
 
-Notas Finais
 
-Certifique-se de que a pasta storage/ e bootstrap/cache/ têm permissões de escrita.
+
 
 Todas as credenciais de teste estão incluídas acima.
 
