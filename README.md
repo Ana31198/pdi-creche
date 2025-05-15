@@ -22,19 +22,6 @@ responsavel@creche.com password: responsavel123
 educador@creche.com password: educadora123
 
 
-Estrutura dos documentos importantes 
-
-resources/views       # Interfaces (Blade)
-
-app/Http/Controllers  # Lógica dos controladores
-
-app/Models            # Modelos da base de dados
-
-routes/web.php        # Definição das rotas
-
-public/               # Assets públicos (imagens, CSS, etc)
-
-database/migrations   # Estrutura da base de dados
 
 
 
