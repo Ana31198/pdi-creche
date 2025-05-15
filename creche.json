@@ -1,0 +1,119 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"creche"},
+{"type":"table","name":"cache","database":"creche","data":
+[
+{"key":"laravel_cache_creche@admin.com|127.0.0.1","value":"i:2;","expiration":"1747315013"},
+{"key":"laravel_cache_creche@admin.com|127.0.0.1:timer","value":"i:1747315013;","expiration":"1747315013"},
+{"key":"laravel_cache_responsavel@gmail.com|127.0.0.1","value":"i:1;","expiration":"1746627506"},
+{"key":"laravel_cache_responsavel@gmail.com|127.0.0.1:timer","value":"i:1746627506;","expiration":"1746627506"}
+]
+}
+,{"type":"table","name":"cache_locks","database":"creche","data":
+[
+
+]
+}
+,{"type":"table","name":"chats","database":"creche","data":
+[
+{"id":"1","created_at":"2025-05-07 14:17:47","updated_at":"2025-05-07 14:17:47"},
+{"id":"2","created_at":"2025-05-08 15:05:46","updated_at":"2025-05-08 15:05:46"}
+]
+}
+,{"type":"table","name":"chat_user","database":"creche","data":
+[
+{"id":"1","chat_id":"1","user_id":"2","created_at":"2025-05-07 14:17:47","updated_at":"2025-05-07 14:17:47"},
+{"id":"2","chat_id":"1","user_id":"3","created_at":"2025-05-07 14:17:47","updated_at":"2025-05-07 14:17:47"},
+{"id":"3","chat_id":"2","user_id":"1","created_at":"2025-05-08 15:05:46","updated_at":"2025-05-08 15:05:46"},
+{"id":"4","chat_id":"2","user_id":"3","created_at":"2025-05-08 15:05:46","updated_at":"2025-05-08 15:05:46"}
+]
+}
+,{"type":"table","name":"configuracoes","database":"creche","data":
+[
+{"id":"1","hora_abertura":"06:30:00","hora_fechamento":"18:00:00","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-14 15:09:40"}
+]
+}
+,{"type":"table","name":"criancas","database":"creche","data":
+[
+{"id":"1","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22","nome":"Martim","genero":"Masculino","data_nascimento":"2020-06-15","nomeresponsavel":"Ana ","graudeparentescodoresponsavel":"Mãe","contactodoresponsavel":"912345678","image":"img\/criancas\/martim.jpg"},
+{"id":"2","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22","nome":"Joao ","genero":"Masculino","data_nascimento":"2019-11-03","nomeresponsavel":"Ana ","graudeparentescodoresponsavel":"Mãe","contactodoresponsavel":"913456789","image":"img\/criancas\/joao.jpg"}
+]
+}
+,{"type":"table","name":"failed_jobs","database":"creche","data":
+[
+
+]
+}
+,{"type":"table","name":"fotos","database":"creche","data":
+[
+{"id":"1","crianca_id":"1","titulo":"Dia da Alegria","descricao":"Foto tirada durante o evento do Dia da Alegria.","caminho":"img\/criancas\/martim.jpg","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"},
+{"id":"2","crianca_id":"1","titulo":"Brincadeiras no Parque","descricao":"Momento divertido no parquinho.","caminho":"img\/criancas\/martimpasseio.jpg","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"}
+]
+}
+,{"type":"table","name":"jobs","database":"creche","data":
+[
+
+]
+}
+,{"type":"table","name":"job_batches","database":"creche","data":
+[
+
+]
+}
+,{"type":"table","name":"messages","database":"creche","data":
+[
+{"id":"1","chat_id":"1","user_id":"3","message":"Ola . O meu filho tem sido exemplar","created_at":"2025-05-07 14:18:05","updated_at":"2025-05-07 14:19:25","is_read":"1"},
+{"id":"2","chat_id":"1","user_id":"2","message":"Sim ele tem se portado muito bem","created_at":"2025-05-07 14:19:25","updated_at":"2025-05-14 15:00:39","is_read":"1"},
+{"id":"3","chat_id":"1","user_id":"3","message":"Ainda bem fico muito orgulhosa","created_at":"2025-05-14 15:00:39","updated_at":"2025-05-14 15:01:38","is_read":"1"}
+]
+}
+,{"type":"table","name":"migrations","database":"creche","data":
+[
+{"id":"1","migration":"0001_01_01_000000_create_users_table","batch":"1"},
+{"id":"2","migration":"0001_01_01_000001_create_cache_table","batch":"1"},
+{"id":"3","migration":"0001_01_01_000002_create_jobs_table","batch":"1"},
+{"id":"4","migration":"2025_02_27_155711_create_criancas_table","batch":"1"},
+{"id":"5","migration":"2025_02_27_183558_add_image_to_criancas_table","batch":"1"},
+{"id":"6","migration":"2025_03_04_222810_create_rotinas_table","batch":"1"},
+{"id":"7","migration":"2025_03_05_005914_create_presencas_table","batch":"1"},
+{"id":"8","migration":"2025_03_05_120641_update_presencas_table","batch":"1"},
+{"id":"9","migration":"2025_03_05_123620_add_saida_to_presencas_table","batch":"1"},
+{"id":"10","migration":"2025_03_05_124324_add_retirado_por_to_presencas_table","batch":"1"},
+{"id":"11","migration":"2025_03_19_173742_create_fotos_table","batch":"1"},
+{"id":"12","migration":"2025_03_25_211534_create_configuracoes_table","batch":"1"},
+{"id":"13","migration":"2025_04_30_174825_create_chats_table","batch":"1"},
+{"id":"14","migration":"2025_04_30_175421_create_mensagens_table","batch":"1"},
+{"id":"15","migration":"2025_04_30_230759_add_is_read_to_messages_table","batch":"1"},
+{"id":"16","migration":"2025_05_01_144506_create_chat_user_table","batch":"1"}
+]
+}
+,{"type":"table","name":"password_reset_tokens","database":"creche","data":
+[
+
+]
+}
+,{"type":"table","name":"presencas","database":"creche","data":
+[
+{"id":"1","crianca_id":"1","data":"2025-05-07","responsavel":"Ana","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-14 15:01:31","hora":"08:00:00","saida":"15:01:31","retirado_por":"Ana","tipo":"entrada"}
+]
+}
+,{"type":"table","name":"rotinas","database":"creche","data":
+[
+{"id":"1","crianca_id":"1","data":"2025-05-07","atividade":"Brincadeira no parque","descricao":"A criança participou de atividades ao ar livre no parque da creche.","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"},
+{"id":"2","crianca_id":"1","data":"2025-05-07","atividade":"Almoço","descricao":"A criança almoçou no horário regular às 12h.","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"},
+{"id":"3","crianca_id":"1","data":"2025-05-07","atividade":"Soneca","descricao":"A criança tirou uma soneca de 14h às 15h.","created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"}
+]
+}
+,{"type":"table","name":"sessions","database":"creche","data":
+[
+{"id":"oCUz0aeLDACH3VnStoK8tDDQZ8QEt94ZviS2nIPZ","user_id":"1","ip_address":"127.0.0.1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/136.0.0.0 Safari\/537.36","payload":"YTo1OntzOjY6Il90b2tlbiI7czo0MDoiNnNFcDVSYldwYUpSUDZZQmgyYVg5ckdVVGcwSGZzUXJ5VEt2a1A4SCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvZGFzaGJvYXJkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9","last_activity":"1747314972"}
+]
+}
+,{"type":"table","name":"users","database":"creche","data":
+[
+{"id":"1","role":"admin","name":"Administrador","email":"admin@creche.com","email_verified_at":null,"password":"$2y$12$\/2pdlPOeE2LD4tJnUzzGROIA4h0eZGr8khImulsNJHWp4HA2wQJtC","remember_token":null,"created_at":"2025-05-07 14:16:21","updated_at":"2025-05-07 14:16:21"},
+{"id":"2","role":"educador","name":"Educadora luisa","email":"educador@creche.com","email_verified_at":null,"password":"$2y$12$JfGBpIQyZNVYJhVTFdk3UORYb9UYqIcvlZPNfd\/FFooQe28Hv4tru","remember_token":null,"created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"},
+{"id":"3","role":"responsavel","name":"Ana","email":"responsavel@creche.com","email_verified_at":null,"password":"$2y$12$3yI8nXjfyPrNtzIyaUm59OFyN\/VuE98\/oJ3.vmlfFFDSEUP.ghJcG","remember_token":null,"created_at":"2025-05-07 14:16:22","updated_at":"2025-05-07 14:16:22"}
+]
+}
+]
