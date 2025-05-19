@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="container mt-4">
-«
+
     <div id="search-container" class="col-md-12 mb-4">
         <h1 class="crianca">Pesquise uma Criança</h1>
         <form action="{{ route('dashboard') }}" method="GET">
