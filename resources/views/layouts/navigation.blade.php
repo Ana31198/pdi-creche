@@ -37,7 +37,9 @@
                         <li class="nav-item"><a class="nav-link" href="/rotinas">Rotinas</a></li>
                         <li class="nav-item"><a class="nav-link" href="/presencas">Presenças</a></li>
                         <li class="nav-item"><a class="nav-link" href="/fotos">Fotografias</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/pagamentos">Pagamentos</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">Contacto</a></li>
+
     
                         @auth
                             @php

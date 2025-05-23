@@ -26,6 +26,9 @@ class Crianca extends Model
     {
         return $query->whereRaw('LOWER(nomeresponsavel) = LOWER(?)', [$nome]);
     }
-    
+    public function pagamentos()
+{
+    return $this->hasMany(Pagamento::class);
+}
     
 }

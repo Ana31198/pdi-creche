@@ -12,6 +12,7 @@ use App\Http\Controllers\PresencaController;
 use App\Http\Controllers\FotosController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MensagemController;
+use App\Http\Controllers\PagamentoController;
 use App\Http\Controllers\UtilizadorController;
 use App\Models\User;
 use App\Models\Chat;
@@ -69,6 +70,10 @@ Route::middleware('auth')->group(function () {
 
     
     Route::post('/presencas/{id}/registar-saida', [PresencaController::class, 'registar_saida'])->name('presencas.registar_saida');
+    Route::resource('pagamentos', PagamentoController::class);
+    Route::get('/pagamentos', [PagamentoController::class, 'index'])->name('pagamentos.index');
+Route::get('/pagamentos/create', [PagamentoController::class, 'create'])->name('pagamentos.create');
+Route::post('/pagamentos', [PagamentoController::class, 'store'])->name('pagamentos.store');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -77,7 +82,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+Route::middleware(['auth'])->group(function () {
+    Route::resource('pagamentos', PagamentoController::class);
+    Route::get('pagamentos/{pagamento}/recibo', [PagamentoController::class, 'gerarRecibo'])
+        ->name('pagamentos.recibo');
+ Route::get('/pagamentos/{id}/pagar', [PagamentoController::class, 'pagar'])->name('pagamentos.pagar');
+Route::post('/pagamentos/{id}/confirmar', [PagamentoController::class, 'confirmarPagamento'])->name('pagamentos.confirmar');
+    });
+Route::patch('/pagamentos/{id}/marcar-pago', [PagamentoController::class, 'marcarComoPago'])->name('pagamentos.marcarPago');
 
 });
 
