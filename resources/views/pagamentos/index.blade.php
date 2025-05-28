@@ -4,14 +4,14 @@
 
 @php use Illuminate\Support\Str; @endphp
 
-<div class="container">
+<div class="container mb-5">
     <h1>Lista de Pagamentos</h1>
 
     @if (auth()->user()->role !== 'responsavel')
-        <a href="{{ route('pagamentos.create') }}" class="btn btn-primary mb-3">Novo Pagamento</a>
+        <a href="{{ route('pagamentos.create') }}" class="btn btn-primary mb-4">Novo Pagamento</a>
     @endif
 
-    <table class="table table-bordered">
+    <table class="table table-bordered mt-4 mb-5">
         <thead>
             <tr>
                 <th>Criança</th>
@@ -19,7 +19,6 @@
                 <th>Valor</th>
                 <th>Estado</th>
                 <th>Recibo</th>
-           
             </tr>
         </thead>
         <tbody>
@@ -47,7 +46,6 @@
                             <a href="{{ route('pagamentos.recibo', $pagamento) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
                         @endif
                     </td>
-                   
                 </tr>
             @endforeach
         </tbody>

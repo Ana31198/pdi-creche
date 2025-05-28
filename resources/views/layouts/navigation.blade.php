@@ -17,20 +17,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="/js/scripts.js"></script>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
-                    <img src="/imgs/logotipo.jpeg" alt="Logotipo" class="me-2">
-           
+                    <img src="/imgs/logotipo.jpeg" alt="Logotipo" class="me-2" style="width: 150px;">
                 </a>
-    
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                         aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-    
+
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav align-items-center">
                         <li class="nav-item"><a class="nav-link" href="/criancas">Crianças</a></li>
@@ -40,7 +39,6 @@
                         <li class="nav-item"><a class="nav-link" href="/pagamentos">Pagamentos</a></li>
                         <li class="nav-item"><a class="nav-link" href="/contact">Contacto</a></li>
 
-    
                         @auth
                             @php
                                 $unreadCount = \App\Models\Chat::whereHas('users', function ($q) {
@@ -54,7 +52,7 @@
                                     ->flatMap->messages
                                     ->count();
                             @endphp
-    
+
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" href="{{ route('chat.index') }}">
                                     Chats
@@ -64,8 +62,8 @@
                                 </a>
                             </li>
                         @endauth
-    
-                            @guest
+
+                        @guest
                             <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registar</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Entrar</a></li>
                         @else
@@ -91,7 +89,7 @@
         </nav>
     </header>
 
-    <main>
+    <main class="flex-fill">
         @yield('content')
     </main>
 
