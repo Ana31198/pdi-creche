@@ -22,11 +22,12 @@ class PagamentoPendenteNotification extends Notification
     }
 
   
-    public function toDatabase($notifiable)
+ public function toDatabase($notifiable)
 {
     return [
         'message' => 'Pagamento pendente para a criança ' . $this->pagamento->crianca->nome,
         'url' => route('pagamentos.pagar', $this->pagamento->id),
+        'pagamento_id' => $this->pagamento->id, // IMPORTANTE
     ];
 }
 }

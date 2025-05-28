@@ -19,9 +19,7 @@
                 <th>Valor</th>
                 <th>Estado</th>
                 <th>Recibo</th>
-                @if (auth()->user()->role !== 'responsavel')
-                    <th>Ações</th>
-                @endif
+           
             </tr>
         </thead>
         <tbody>
@@ -49,17 +47,7 @@
                             <a href="{{ route('pagamentos.recibo', $pagamento) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
                         @endif
                     </td>
-                    @if (auth()->user()->role !== 'responsavel')
-                        <td>
-                            @if ($pagamento->estado === 'pendente')
-                                <form action="{{ route('pagamentos.marcarPago', $pagamento->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-success btn-sm">Marcar como Pago</button>
-                                </form>
-                            @endif
-                        </td>
-                    @endif
+                   
                 </tr>
             @endforeach
         </tbody>

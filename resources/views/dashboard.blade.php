@@ -19,11 +19,15 @@
     </div>
 
     {{-- Notificações --}}
-    @if (auth()->user()->unreadNotifications->count())
+    @php
+        $notificacoes = auth()->user()->unreadNotifications;
+    @endphp
+
+    @if ($notificacoes->count())
         <div class="alert alert-info">
             <h5>Notificações</h5>
             <ul>
-                @foreach (auth()->user()->unreadNotifications as $notification)
+                @foreach ($notificacoes as $notification)
                     <li>
                         {{ $notification->data['message'] ?? 'Nova notificação' }}
                         @if (!empty($notification->data['url']))

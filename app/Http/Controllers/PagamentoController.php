@@ -35,30 +35,30 @@ class PagamentoController extends Controller
         return view('pagamentos.create', compact('criancas'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'crianca_id' => 'required|exists:criancas,id',
-            'valor' => 'required|numeric',
-            'data_pagamento' => 'required|date',
-            'descricao' => 'nullable|string',
-            'estado' => 'required|in:pago,pendente',
-        ]);
+  public function store(Request $request)
+{
+    $request->validate([
+        'crianca_id' => 'required|exists:criancas,id',
+        'valor' => 'required|numeric',
+        'data_pagamento' => 'required|date',
+        'descricao' => 'nullable|string',
+        'estado' => 'required|in:pago,pendente',
+    ]);
 
-        $pagamento = Pagamento::create($request->all());
+    $pagamento = Pagamento::create($request->all());
 
-        if ($pagamento->estado === 'pendente') {
-            $responsavel = \App\Models\User::whereRaw('LOWER(TRIM(name)) = ?', [
-                Str::lower(trim($pagamento->crianca->nomeresponsavel))
-            ])->first();
+    if ($pagamento->estado === 'pendente') {
+        $responsavel = \App\Models\User::whereRaw('LOWER(TRIM(name)) = ?', [
+            Str::lower(trim($pagamento->crianca->nomeresponsavel))
+        ])->first();
 
-            if ($responsavel) {
-                $responsavel->notify(new PagamentoPendenteNotification($pagamento));
-            }
+        if ($responsavel) {
+            $responsavel->notify(new PagamentoPendenteNotification($pagamento));
         }
-
-        return redirect()->back()->with('success', 'Pagamento registado com sucesso.');
     }
+
+    return redirect()->route('pagamentos.index')->with('success', 'Pagamento registado com sucesso.');
+}
 
     public function gerarRecibo(Pagamento $pagamento)
     {
@@ -113,10 +113,13 @@ class PagamentoController extends Controller
 
         $pagamento->update(['estado' => 'pago']);
 
-        // Apaga notificações pendentes deste pagamento
-        $user->unreadNotifications()
-            ->where('data->url', route('pagamentos.pagar', $pagamento->id))
-            ->delete();
+        // Apagar notificações relacionadas com este pagamento (usando pagamento_id)
+        $user->unreadNotifications
+            ->filter(function ($notification) use ($pagamento) {
+                return isset($notification->data['pagamento_id']) &&
+                       $notification->data['pagamento_id'] == $pagamento->id;
+            })
+            ->each->delete();
 
         return redirect()->route('pagamentos.index')->with('success', 'Pagamento realizado com sucesso.');
     }
@@ -125,11 +128,12 @@ class PagamentoController extends Controller
     {
         $pagamento = Pagamento::findOrFail($id);
 
-        if (auth()->user()->role !== 'admin' && auth()->user()->role !== 'educador') {
+        if (!in_array(auth()->user()->role, ['admin', 'educador'])) {
             abort(403, 'Sem permissão para marcar como pago.');
         }
 
         $pagamento->update(['estado' => 'pago']);
+
         return back()->with('success', 'Pagamento marcado como pago.');
     }
 }
