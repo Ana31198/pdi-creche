@@ -78,6 +78,7 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{{ route('login') }}" class="text-decoration-none">Já tem conta?</a>
+                      <a href="{{ url('/') }}" class="text-decoration-none">Voltar</a>
                     <button type="submit" class="btn btn-primary">Registar</button>
                 </div>
             </form>

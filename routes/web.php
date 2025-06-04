@@ -14,17 +14,24 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MensagemController;
 use App\Http\Controllers\PagamentoController;
 use App\Http\Controllers\UtilizadorController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Models\User;
 use App\Models\Chat;
 use App\Models\Mensagem;
 
 
 
+Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+
+Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect('/dashboard'); // Redireciona usuários logados
+        return redirect('/dashboard'); 
     }
-    return view('welcome'); // Página padrão para visitantes
+    return view('welcome'); 
 });
 Route::get('/contact', function () {
     return view('contact');

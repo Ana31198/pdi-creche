@@ -1,39 +1,74 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
-
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Palavra-passe - Creche Ana Simões</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f8fa;
+        }
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .register-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        .logo {
+            max-width: 80px;
+        }
+    </style>
+</head>
+<body>
+<div class="container register-container">
+    <div class="register-card">
+        <div class="text-center mb-4">
+            <img src="/imgs/logotipo.jpeg" alt="Logotipo" class="logo mb-2">
+            <h4 class="fw-bold">Nova Palavra-passe</h4>
+            <p class="text-muted">Preencha os campos para definir uma nova palavra-passe.</p>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('password.store') }}">
+            @csrf
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" type="email" name="email" class="form-control"
+                       value="{{ old('email', $request->email) }}" required autofocus>
+                @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Nova Palavra-passe</label>
+                <input id="password" type="password" name="password" class="form-control" required>
+                @error('password') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirmar Palavra-passe</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" required>
+                @error('password_confirmation') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ route('login') }}" class="text-decoration-none">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Redefinir</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

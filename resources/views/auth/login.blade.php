@@ -64,6 +64,7 @@
                     @if (Route::has('password.request'))
                         <a class="small text-decoration-none" href="{{ route('password.request') }}">Esqueceu a palavra-passe?</a>
                     @endif
+     <a href="{{ url('/') }}" class="text-decoration-none">Voltar</a>
                 </div>
 
                 <div class="d-grid mb-3">
