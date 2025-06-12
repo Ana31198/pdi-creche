@@ -37,39 +37,45 @@ class FotosController extends Controller
         return view('fotos.create', compact('criancas'));
     }
     
-    public function store(Request $request)
-    {
-        $request->validate([
-            'crianca_id' => 'required|exists:criancas,id',
-            'titulo' => 'required|string|max:255',
-            'descricao' => 'nullable|string',
-            'imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-    
-        $imagem = $request->file('imagem');
-        $caminho = $imagem->store('fotos', 'public');
-    
-        $foto = new Foto();
-        $foto->crianca_id = $request->crianca_id;
-        $foto->titulo = $request->titulo;
-        $foto->descricao = $request->descricao;
-        $foto->caminho = $caminho;
-        $foto->save();
-    
-        return redirect()->route('fotos.index')->with('success', 'Foto adicionada com sucesso!');
+ public function store(Request $request)
+{
+    $request->validate([
+        'crianca_id' => 'required|exists:criancas,id',
+        'titulo' => 'required|string|max:255',
+        'descricao' => 'nullable|string',
+        'imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    $imagem = $request->file('imagem');
+    $imageName = $imagem->getClientOriginalName();
+    $caminho = 'img/criancas/' . $imageName;
+
+    $imagem->move(public_path('img/criancas'), $imageName); // guarda no public
+
+    Foto::create([
+        'crianca_id' => $request->crianca_id,
+        'titulo' => $request->titulo,
+        'descricao' => $request->descricao,
+        'caminho' => $caminho,
+    ]);
+
+    return redirect()->route('fotos.index')->with('success', 'Foto adicionada com sucesso!');
+}
+   public function show($id)
+{
+    $foto = Foto::with('crianca')->findOrFail($id); // IMPORTANTE
+
+    $user = auth()->user();
+
+    if (
+        $user->isResponsavel() &&
+        (! $foto->crianca || strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name))
+    ) {
+        abort(403, 'Acesso não autorizado.');
     }
-    
-    public function show(Foto $foto)
-    {
-        $user = Auth::user();
-        
-        if ($user->isPai() && strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name)) {
-            abort(403, 'Acesso não autorizado.');
-        }
-    
-        return view('fotos.show', compact('foto'));
-    }
-    
+
+    return view('fotos.show', compact('foto'));
+}
     public function edit(Foto $foto)
     {
         $criancas = Crianca::all();

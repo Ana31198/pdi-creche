@@ -74,6 +74,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/fotos/{id}/edit', [FotosController::class, 'edit'])->name('fotos.edit');
     Route::put('/fotos/{id}', [FotosController::class, 'update'])->name('fotos.update');
     Route::delete('/fotos/{id}', [FotosController::class, 'destroy'])->name('fotos.destroy');
+    Route::get('/fotos/{foto}', [FotosController::class, 'show'])->name('fotos.show');
+
 
     
     Route::post('/presencas/{id}/registar-saida', [PresencaController::class, 'registar_saida'])->name('presencas.registar_saida');
