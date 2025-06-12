@@ -22,7 +22,7 @@ class CriancasTableSeeder extends Seeder
         );
 
         Crianca::firstOrCreate(
-            ['nome' => 'Joao '],
+            ['nome' => 'João '],
             [
                 'data_nascimento' => '2019-11-03',
                 'genero' => 'Masculino',
