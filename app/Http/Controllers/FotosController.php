@@ -67,12 +67,6 @@ class FotosController extends Controller
 
     $user = auth()->user();
 
-    if (
-        $user->isResponsavel() &&
-        (! $foto->crianca || strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name))
-    ) {
-        abort(403, 'Acesso não autorizado.');
-    }
 
     return view('fotos.show', compact('foto'));
 }
