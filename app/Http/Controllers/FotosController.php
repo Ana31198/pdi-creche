@@ -14,9 +14,9 @@ class FotosController extends Controller
     {
         $search = $request->input('search');
         $user = Auth::user();
-        
+
         if ($user->isResponsavel()) {
-            $criancasIds = Crianca::where('nomeresponsavel', $user->name)->pluck('id');
+            $criancasIds = Crianca::whereRaw('LOWER(TRIM(nomeresponsavel)) = ?', [strtolower(trim($user->name))])->pluck('id');
             $fotosQuery = Foto::whereIn('crianca_id', $criancasIds);
         } else {
             $fotosQuery = Foto::query();
@@ -25,85 +25,134 @@ class FotosController extends Controller
         if ($search) {
             $fotosQuery->where('titulo', 'like', '%' . $search . '%');
         }
-        
+
         $fotos = $fotosQuery->paginate(9);
-        
+
         return view('fotos.index', ['fotos' => $fotos]);
     }
-    
+
     public function create()
     {
-        $criancas = Crianca::all();
+        $user = Auth::user();
+
+        if ($user->isResponsavel()) {
+            $criancas = Crianca::whereRaw('LOWER(TRIM(nomeresponsavel)) = ?', [strtolower(trim($user->name))])->get();
+        } else {
+            $criancas = Crianca::all();
+        }
+
         return view('fotos.create', compact('criancas'));
     }
-    
- public function store(Request $request)
-{
-    $request->validate([
-        'crianca_id' => 'required|exists:criancas,id',
-        'titulo' => 'required|string|max:255',
-        'descricao' => 'nullable|string',
-        'imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-    ]);
 
-    $imagem = $request->file('imagem');
-    $imageName = $imagem->getClientOriginalName();
-    $caminho = 'img/criancas/' . $imageName;
+    public function store(Request $request)
+    {
+        $request->validate([
+            'crianca_id' => 'required|exists:criancas,id',
+            'titulo' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
-    $imagem->move(public_path('img/criancas'), $imageName); // guarda no public
+        $user = Auth::user();
+        $crianca = Crianca::findOrFail($request->crianca_id);
 
-    Foto::create([
-        'crianca_id' => $request->crianca_id,
-        'titulo' => $request->titulo,
-        'descricao' => $request->descricao,
-        'caminho' => $caminho,
-    ]);
+        if ($user->isResponsavel() && strtolower(trim($crianca->nomeresponsavel)) !== strtolower(trim($user->name))) {
+            abort(403, 'Não tem permissão para adicionar fotos desta criança.');
+        }
 
-    return redirect()->route('fotos.index')->with('success', 'Foto adicionada com sucesso!');
-}
-   public function show($id)
-{
-    $foto = Foto::with('crianca')->findOrFail($id); // IMPORTANTE
+        $imagem = $request->file('imagem');
+        $imageName = $imagem->getClientOriginalName();
+        $caminho = 'img/criancas/' . $imageName;
 
-    $user = auth()->user();
+        $imagem->move(public_path('img/criancas'), $imageName);
 
+        Foto::create([
+            'crianca_id' => $request->crianca_id,
+            'titulo' => $request->titulo,
+            'descricao' => $request->descricao,
+            'caminho' => $caminho,
+        ]);
 
-    return view('fotos.show', compact('foto'));
-}
+        return redirect()->route('fotos.index')->with('success', 'Foto adicionada com sucesso!');
+    }
+
+    public function show($id)
+    {
+        $foto = Foto::with('crianca')->findOrFail($id);
+        $user = auth()->user();
+
+        if ($user->isResponsavel() && strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name)) {
+            abort(403, 'Não tem permissão para ver esta foto.');
+        }
+
+        return view('fotos.show', compact('foto'));
+    }
+
     public function edit(Foto $foto)
     {
-        $criancas = Crianca::all();
+        $user = Auth::user();
+
+        if ($user->isResponsavel() && strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name)) {
+            abort(403, 'Não tem permissão para editar esta foto.');
+        }
+
+        $criancas = $user->isResponsavel()
+            ? Crianca::whereRaw('LOWER(TRIM(nomeresponsavel)) = ?', [strtolower(trim($user->name))])->get()
+            : Crianca::all();
+
         return view('fotos.edit', compact('foto', 'criancas'));
     }
-    
+
     public function update(Request $request, Foto $foto)
     {
+        $user = Auth::user();
+
+        if ($user->isResponsavel() && strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name)) {
+            abort(403, 'Não tem permissão para atualizar esta foto.');
+        }
+
         $request->validate([
             'crianca_id' => 'required|exists:criancas,id',
             'titulo' => 'required|string|max:255',
             'descricao' => 'nullable|string',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-    
+
         if ($request->hasFile('imagem')) {
-            Storage::disk('public')->delete($foto->caminho);
-            $foto->caminho = $request->file('imagem')->store('fotos', 'public');
+            if (file_exists(public_path($foto->caminho))) {
+                unlink(public_path($foto->caminho));
+            }
+
+            $imagem = $request->file('imagem');
+            $imageName = $imagem->getClientOriginalName();
+            $caminho = 'img/criancas/' . $imageName;
+            $imagem->move(public_path('img/criancas'), $imageName);
+            $foto->caminho = $caminho;
         }
-    
+
         $foto->update([
             'crianca_id' => $request->crianca_id,
             'titulo' => $request->titulo,
             'descricao' => $request->descricao,
         ]);
-    
+
         return redirect()->route('fotos.index')->with('success', 'Foto atualizada com sucesso!');
     }
-    
+
     public function destroy(Foto $foto)
     {
-        Storage::disk('public')->delete($foto->caminho);
+        $user = Auth::user();
+
+        if ($user->isResponsavel() && strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name)) {
+            abort(403, 'Não tem permissão para apagar esta foto.');
+        }
+
+        if (file_exists(public_path($foto->caminho))) {
+            unlink(public_path($foto->caminho));
+        }
+
         $foto->delete();
-    
+
         return redirect()->route('fotos.index')->with('success', 'Foto excluída com sucesso!');
     }
 }
