@@ -76,18 +76,24 @@ class FotosController extends Controller
         return redirect()->route('fotos.index')->with('success', 'Foto adicionada com sucesso!');
     }
 
-    public function show($id)
-    {
-        $foto = Foto::with('crianca')->findOrFail($id);
-        $user = auth()->user();
+   public function show($id)
+{
+    $foto = Foto::with('crianca')->findOrFail($id);
+    $user = auth()->user();
 
-        if ($user->isResponsavel() && strtolower($foto->crianca->nomeresponsavel) !== strtolower($user->name)) {
+    // Verifica se o utilizador é um responsável
+    if ($user->isResponsavel()) {
+        // Compara o nome do responsável autenticado com o nome guardado na criança
+        $responsavelFoto = trim(strtolower($foto->crianca->nomeresponsavel));
+        $responsavelUser = trim(strtolower($user->name));
+
+        if ($responsavelFoto !== $responsavelUser) {
             abort(403, 'Não tem permissão para ver esta foto.');
         }
-
-        return view('fotos.show', compact('foto'));
     }
 
+    return view('fotos.show', compact('foto'));
+}
     public function edit(Foto $foto)
     {
         $user = Auth::user();
