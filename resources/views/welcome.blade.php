@@ -4,6 +4,7 @@
 @section('content')
 
 <div class="container text-center">
+    <br>
     <h1>Bem-vindo à Nossa Creche</h1>
     <p class="lead">
         Uma plataforma inovadora para conectar pais, educadores e a gestão da creche, garantindo transparência, comunicação eficiente e acompanhamento do desenvolvimento infantil.
@@ -23,7 +24,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Registo Diário</h5>
-                    <p class="card-text">Relatórios diários sobre alimentação, atividades e bem-estar do seu filho, acessíveis a qualquer momento.</p>
+                    <p class="card-text">Relatórios diários sobre alimentação, atividades e bem-estar  acessíveis a qualquer momento.</p>
                 </div>
             </div>
         </div>
@@ -42,8 +43,8 @@
         <div class="col-md-4 mb-4"> 
             <div class="card shadow-lg">
                 <div class="card-body">
-                    <h5 class="card-title">Agenda e Eventos</h5>
-                    <p class="card-text">Acompanhe o calendário de eventos, reuniões e atividades da creche para estar sempre informado.</p>
+                    <h5 class="card-title">Pagamentos</h5>
+                    <p class="card-text">Acompanhe o pagamento de eventos,  e atividades da creche .</p>
                 </div>
             </div>
         </div>
